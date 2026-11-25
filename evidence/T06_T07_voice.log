@@ -1,0 +1,44 @@
+/opt/oj/venv/lib/python3.13/site-packages/torch/nn/modules/rnn.py:1012: UserWarning: dropout option adds dropout after all but last recurrent layer, so non-zero dropout expects num_layers greater than 1, but got dropout=0.2 and num_layers=1
+  super().__init__("LSTM", *args, **kwargs)
+/opt/oj/venv/lib/python3.13/site-packages/torch/nn/utils/weight_norm.py:145: FutureWarning: `torch.nn.utils.weight_norm` is deprecated in favor of `torch.nn.utils.parametrizations.weight_norm`.
+  WeightNorm.apply(module, name, dim)
+warning: The `UV_NATIVE_TLS` environment variable is deprecated and will be removed in a future release. Use `UV_SYSTEM_CERTS` instead.
+Using Python 3.13.18 environment at: /opt/oj/venv
+Resolved 1 package in 1.56s
+Downloading en-core-web-sm (12.2MiB)
+ Downloaded en-core-web-sm
+Prepared 1 package in 667ms
+Installed 1 package in 4ms
+ + en-core-web-sm==3.8.0 (from https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.8.0/en_core_web_sm-3.8.0-py3-none-any.whl)
+/opt/oj/venv/lib/python3.13/site-packages/torch/jit/_script.py:1491: FutureWarning: `torch.jit.script` is deprecated. Please switch to `torch.compile` or `torch.export`.
+  warnings.warn(
+[38;5;2m✔ Download and installation successful[0m
+You can now load the package via spacy.load('en_core_web_sm')
+{
+ "af_heart": {
+  "voice": "af_heart",
+  "text_in": "Hello Jarvis. The synthetic invoice total is four hundred twenty dollars.",
+  "tts_s": 118.15,
+  "wav": "/opt/oj/evidence/audio/tts_af_heart.wav",
+  "audio_s": 5.1,
+  "rate": 24000,
+  "stt_s": 8.13,
+  "text_out": "Hello Jarvis, the synthetic invoice total is $420.",
+  "lang": "en"
+ },
+ "ef_dora": {
+  "voice": "ef_dora",
+  "text_in": "Hola Jarvis. El reporte de cobranza de prueba está listo.",
+  "tts_s": 1.59,
+  "wav": "/opt/oj/evidence/audio/tts_ef_dora.wav",
+  "audio_s": 3.48,
+  "rate": 24000,
+  "stt_s": 1.23,
+  "text_out": "Hola Harbys, el reporte de cobranza de prueba está listo.",
+  "lang": "es"
+ }
+}
+
+real	2m11.703s
+user	0m26.025s
+sys	0m5.851s

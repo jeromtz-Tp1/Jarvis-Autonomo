@@ -1,0 +1,55 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+
+OpenJarvis Doctor
+
+┏━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ St… ┃ Check                             ┃ Result                             ┃
+┡━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│  ✓  │ Python version                    │ 3.13.18                            │
+│  ✓  │ Config file                       │ /opt/oj/home/.openjarvis/config.t… │
+│  ✓  │ Config parsing                    │ Config loaded successfully         │
+│  !  │ Engine: apple_fm                  │ Unreachable                        │
+│  i  │ Engine: cloud                     │ Remote or unknown endpoint — not   │
+│     │                                   │ probed (use --probe-remote)        │
+│  !  │ Engine: exo                       │ Unreachable                        │
+│  !  │ Engine: gemma_cpp                 │ Unreachable                        │
+│  !  │ Engine: lemonade                  │ Unreachable                        │
+│  i  │ Engine: litellm                   │ Remote or unknown endpoint — not   │
+│     │                                   │ probed (use --probe-remote)        │
+│  !  │ Engine: llamacpp                  │ Unreachable                        │
+│  !  │ Engine: lmstudio                  │ Unreachable                        │
+│  !  │ Engine: mlx                       │ Unreachable                        │
+│  !  │ Engine: nexa                      │ Unreachable                        │
+│  i  │ Engine: nim                       │ Remote or unknown endpoint — not   │
+│     │                                   │ probed (use --probe-remote)        │
+│  ✓  │ Engine: ollama                    │ Reachable                          │
+│  !  │ Engine: sglang                    │ Unreachable                        │
+│  !  │ Engine: uzu                       │ Unreachable                        │
+│  !  │ Engine: vllm                      │ Unreachable                        │
+│  ✓  │ Models: ollama                    │ qwen3.5:2b                         │
+│  ✓  │ Default model                     │ qwen3.5:2b (on ollama)             │
+│  ✓  │ Optional: REST API server         │ Installed                          │
+│  ✓  │ Optional: SFT/GRPO training       │ Installed                          │
+│  ✓  │ Optional: NVIDIA energy           │ Installed                          │
+│     │ monitoring                        │                                    │
+│  !  │ Optional: AMD energy monitoring   │ Not installed (openjarvis)         │
+│  !  │ Optional: ColBERT memory backend  │ Not installed (openjarvis)         │
+│  !  │ Optional: Apple Silicon energy    │ Not installed (openjarvis)         │
+│     │ monitoring                        │                                    │
+│  !  │ Optional: Apple Foundation Models │ Not installed (openjarvis)         │
+│     │ (AFM 3)                           │                                    │
+│  !  │ Speech backend                    │ Not configured                     │
+│     │                                   │   Install desktop dependencies     │
+│     │                                   │ with `uv sync --extra desktop`.    │
+│  ✓  │ Node.js                           │ v22.23.5                           │
+│  !  │ Security profile                  │ No security profile set            │
+│     │                                   │   Recommended: add                 │
+│     │                                   │ security.profile = 'personal' to   │
+│     │                                   │ config.toml                        │
+└─────┴───────────────────────────────────┴────────────────────────────────────┘
+
+  10 passed, 17 warnings, 0 failures
+
+Background tasks
+  ✓ Rust extension: ready
+  no model downloads tracked

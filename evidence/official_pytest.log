@@ -1,0 +1,17 @@
+FAILED tests/memory/test_bm25.py::test_store_returns_id - AssertionError: ass...
+FAILED tests/memory/test_bm25.py::test_delete - AttributeError: 'builtins.BM2...
+FAILED tests/memory/test_bm25.py::test_delete_nonexistent - AttributeError: '...
+FAILED tests/memory/test_bm25.py::test_clear - AttributeError: 'builtins.BM25...
+FAILED tests/engine/test_gemma_cpp.py::TestGemmaCppLive::test_real_inference_produces_output
+FAILED tests/engine/test_gemma_cpp.py::TestGemmaCppLive::test_prepare_and_close_lifecycle
+FAILED tests/engine/test_gemma_cpp.py::TestGemmaCppLive::test_stream_yields_content
+FAILED tests/engine/test_gemma_cpp.py::TestGemmaCppLive::test_token_counts_are_positive
+FAILED tests/engine/test_openai_compat_tools.py::TestOllamaToolCalls::test_no_tool_calls
+FAILED tests/engine/test_openai_compat_tools.py::TestOllamaToolCalls::test_with_tool_calls
+FAILED tests/engine/test_openai_compat_tools.py::TestOllamaToolCalls::test_tools_in_payload
+FAILED tests/engine/test_openai_compat_tools.py::TestOllamaToolCalls::test_dict_arguments_serialized_to_json
+FAILED tests/engine/test_openai_compat_tools.py::TestOllamaToolCalls::test_no_tools_no_tools_key
+FAILED tests/server/test_connectors_router.py::test_connect_granola_invalid_key_returns_400_keeps_existing
+FAILED tests/server/test_connectors_router.py::test_connect_news_rss_requires_and_persists_feeds
+FAILED tests/cli/test_cli.py::TestStartupResilience::test_importing_cli_does_not_import_numpy
+16 failed, 5577 passed, 69 skipped in 57.09s

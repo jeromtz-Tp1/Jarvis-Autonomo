@@ -1,0 +1,200 @@
+  Memory:    active
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+  Speech: faster-whisper
+  Memory svc: active
+  Scheduler: active
+Starting OpenJarvis API server
+  Engine: ollama
+  Model:  qwen3.5:2b
+  Agent:  orchestrator
+  URL:    http://127.0.0.1:8000
+INFO:     Started server process [9831]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+INFO:     127.0.0.1:49182 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49190 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49202 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [9831]
+  ___                       _                  _     
+ / _ \ _ __   ___ _ __     | | __ _ _ ____   _(_)___ 
+| | | | '_ \ / _ \ '_ \ _  | |/ _` | '__\ \ / / / __|
+| |_| | |_) |  __/ | | | |_| | (_| | |   \ V /| \__ \
+ \___/| .__/ \___|_| |_|\___/ \__,_|_|    \_/ |_|___/
+      |_|                                            
+      Personal AI, On Personal Devices
+
+  Memory:    active
+  Speech: faster-whisper
+  Memory svc: active
+  Scheduler: active
+Starting OpenJarvis API server
+  Engine: ollama
+  Model:  qwen3.5:2b
+  Agent:  orchestrator
+  URL:    http://127.0.0.1:8000
+INFO:     Started server process [10621]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+INFO:     127.0.0.1:38150 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38160 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38170 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56480 - "GET /v1/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56486 - "GET /models HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:56480 - "GET /v1/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33594 - "POST /v1/managed-agents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59954 - "GET /v1/managed-agents/1f258548b6e7 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59970 - "GET /v1/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59980 - "GET /models HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:59970 - "GET /v1/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48018 - "GET /v1/managed-agents/1f258548b6e7 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33156 - "GET /v1/managed-agents/1f258548b6e7 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33166 - "GET /v1/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33182 - "GET /models HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:33166 - "GET /v1/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39788 - "GET /v1/managed-agents/1f258548b6e7 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60744 - "GET /v1/managed-agents/1f258548b6e7 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43514 - "GET /v1/managed-agents/1f258548b6e7 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47416 - "GET /v1/managed-agents/1f258548b6e7 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38136 - "GET /v1/managed-agents/1f258548b6e7 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34702 - "GET /v1/managed-agents/1f258548b6e7 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:42024 - "GET /v1/managed-agents/1f258548b6e7 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58596 - "GET /v1/managed-agents/1f258548b6e7 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40352 - "GET /v1/managed-agents/1f258548b6e7 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54726 - "GET /v1/managed-agents/1f258548b6e7 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38974 - "GET /v1/managed-agents/1f258548b6e7 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47040 - "GET /v1/managed-agents/1f258548b6e7 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39030 - "GET /v1/managed-agents/1f258548b6e7 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45078 - "GET /v1/managed-agents/1f258548b6e7 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34202 - "GET /v1/managed-agents/1f258548b6e7 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51838 - "GET /v1/managed-agents/1f258548b6e7 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56118 - "GET /v1/managed-agents/1f258548b6e7 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50126 - "GET /v1/managed-agents/1f258548b6e7 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54506 - "GET /v1/managed-agents/1f258548b6e7 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33834 - "GET /v1/managed-agents/1f258548b6e7 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33176 - "GET /v1/managed-agents/1f258548b6e7 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48644 - "GET /v1/managed-agents/1f258548b6e7 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58676 - "GET /v1/managed-agents/1f258548b6e7 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54288 - "GET /v1/managed-agents/1f258548b6e7 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46776 - "GET /v1/managed-agents/1f258548b6e7 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38758 - "GET /v1/managed-agents/1f258548b6e7 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58306 - "GET /v1/managed-agents/1f258548b6e7 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57512 - "GET /v1/managed-agents/1f258548b6e7 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33542 - "GET /v1/managed-agents/1f258548b6e7 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46224 - "GET /v1/managed-agents/1f258548b6e7 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49832 - "GET /v1/managed-agents/1f258548b6e7 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59504 - "GET /v1/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59506 - "GET /models HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:59504 - "GET /v1/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59508 - "GET /v1/managed-agents/1f258548b6e7 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59512 - "GET /v1/managed-agents/1f258548b6e7 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52406 - "GET /v1/managed-agents/1f258548b6e7/traces HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52412 - "GET /v1/managed-agents/1f258548b6e7/messages HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60440 - "GET /v1/managed-agents/1f258548b6e7/traces HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60448 - "GET /v1/managed-agents/1f258548b6e7/messages HTTP/1.1" 200 OK
+  ___                       _                  _     
+ / _ \ _ __   ___ _ __     | | __ _ _ ____   _(_)___ 
+| | | | '_ \ / _ \ '_ \ _  | |/ _` | '__\ \ / / / __|
+| |_| | |_) |  __/ | | | |_| | (_| | |   \ V /| \__ \
+ \___/| .__/ \___|_| |_|\___/ \__,_|_|    \_/ |_|___/
+      |_|                                            
+      Personal AI, On Personal Devices
+
+  Memory:    active
+  Speech: faster-whisper
+  Memory svc: active
+  Scheduler: active
+Starting OpenJarvis API server
+  Engine: ollama
+  Model:  qwen3.5:2b
+  Agent:  orchestrator
+  URL:    http://127.0.0.1:8000
+INFO:     Started server process [13005]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+INFO:     127.0.0.1:56496 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56502 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60700 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36348 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60714 - "GET /v1/managed-agents/1f258548b6e7 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38134 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58296 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46976 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46990 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56392 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36938 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59886 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53632 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50292 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48060 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43180 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43186 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51692 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56108 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51612 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39460 - "GET /v1/managed-agents/1f258548b6e7/traces HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41288 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41294 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58284 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56712 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52922 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37010 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52344 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52328 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:42274 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45472 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53074 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41096 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49576 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50540 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38568 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35090 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35606 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47414 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:42978 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48214 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38302 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48296 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40278 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40282 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51368 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38862 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49842 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49342 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:42222 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:42216 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53346 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37230 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59138 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57138 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57150 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49114 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60708 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43476 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40662 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53532 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48146 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43870 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51934 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49502 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38954 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38956 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45800 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37932 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52580 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44062 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56492 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56486 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60036 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52220 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43498 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48254 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48258 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60480 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48620 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43730 - "GET /health HTTP/1.1" 200 OK

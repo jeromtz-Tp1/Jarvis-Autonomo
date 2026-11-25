@@ -1,0 +1,53 @@
+2026-11-25T06:06:45Z
+RESP1: ¡Hola! Bienvenido, OpenJarvis. He notado que tienes un proyecto ficticio llamado **Halcon-7** con el código interno **ZX-9931**. ¿En qué puedo ayudarte hoy?
+facts tras la conversación:
+                                Memory Facts (2)                                
+┏━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━┳━━━━━━━┓
+┃ #    ┃ Fact                                                 ┃ Source ┃ Trust ┃
+┡━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━╇━━━━━━━┩
+│ 1    │ Mi proyecto ficticio se llama Halcon-7 y su código   │ auto   │ auto  │
+│      │ interno es ZX-9931.                                  │        │       │
+│ 2    │ Me llamo OpenJarvis, soy un asistente de IA.         │ auto   │ auto  │
+└──────┴──────────────────────────────────────────────────────┴────────┴───────┘
+total 568
+drwx------ 3 jarvis jarvis   4096 Nov 25 06:07 .
+drwxr-x--- 7 jarvis jarvis   4096 Nov 25 05:48 ..
+-rw-r--r-- 1 jarvis jarvis     16 Nov 25 05:48 MEMORY.md
+-rw-r--r-- 1 jarvis jarvis     66 Nov 25 05:48 SOUL.md
+-rw-r--r-- 1 jarvis jarvis     16 Nov 25 05:48 USER.md
+-rw-r--r-- 1 jarvis jarvis   4096 Nov 25 06:06 agents.db
+-rw-r--r-- 1 jarvis jarvis  32768 Nov 25 06:06 agents.db-shm
+-rw-r--r-- 1 jarvis jarvis 115392 Nov 25 06:06 agents.db-wal
+-rw------- 1 jarvis jarvis   8192 Nov 25 06:06 audit.db
+-rw-r--r-- 1 jarvis jarvis   1184 Nov 25 06:00 config.toml
+-rw-r--r-- 1 jarvis jarvis   4096 Nov 25 06:06 digest.db
+-rw-r--r-- 1 jarvis jarvis  32768 Nov 25 06:06 digest.db-shm
+-rw-r--r-- 1 jarvis jarvis  12392 Nov 25 06:06 digest.db-wal
+-rw-r--r-- 1 jarvis jarvis    143 Nov 25 05:56 mcp_servers.json
+-rw-r--r-- 1 jarvis jarvis  32768 Nov 25 05:57 memory.db
+-rw-r--r-- 1 jarvis jarvis  32768 Nov 25 06:06 memory.db-shm
+-rw-r--r-- 1 jarvis jarvis      0 Nov 25 06:06 memory.db-wal
+-rw------- 1 jarvis jarvis    278 Nov 25 06:07 memory_facts.jsonl
+-rw-r--r-- 1 jarvis jarvis      0 Nov 25 06:07 memory_facts.jsonl.lock
+-rw------- 1 jarvis jarvis     95 Nov 25 06:06 server.identity.json
+-rw------- 1 jarvis jarvis     56 Nov 25 06:06 server.json
+-rw-r--r-- 1 jarvis jarvis      0 Nov 25 06:06 server.lock
+-rw------- 1 jarvis jarvis      4 Nov 25 06:06 server.pid
+drwxr-xr-x 2 jarvis jarvis   4096 Nov 25 05:48 skills
+-rw------- 1 jarvis jarvis  16384 Nov 25 06:01 telemetry.db
+-rw------- 1 jarvis jarvis  32768 Nov 25 06:06 telemetry.db-shm
+-rw------- 1 jarvis jarvis  24752 Nov 25 06:07 telemetry.db-wal
+-rw------- 1 jarvis jarvis  77824 Nov 25 06:01 traces.db
+-rw------- 1 jarvis jarvis  32768 Nov 25 06:06 traces.db-shm
+-rw------- 1 jarvis jarvis  49472 Nov 25 06:06 traces.db-wal
+-rw-r--r-- 1 jarvis jarvis    106 Nov 25 05:48 version-check.json
+--- restart 2026-11-25T06:07:53Z
+stopped
+ollama: {"version":"0.40.18"} pid=10589
+server: {"status":"ok"} pid=10621
+--- recall 2026-11-25T06:08:04Z
+RESP2: El código interno de mi proyecto ficticio Halcon-7 es **ZX-9931**.
+--- control negativo (sin contexto de memoria, CLI --no-context) 06:08:21
+      Personal AI, On Personal Devices
+
+NO_SE

@@ -1,0 +1,36 @@
+2026-11-25T06:08:41Z
+Created task ea46f0b341484ed3
+  Type: interval
+  Value: 60
+  Next run: 2026-11-25T06:09:43.438092+00:00
+  Agent: orchestrator
+  Tools: calculator
+                                Scheduled Tasks                                 
+┏━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━┳━━━━━━━━━━┳━━━━━━━━┳━━━━━━━━━━━━━━┳━━━━━━━━━━━━━┓
+┃ ID           ┃ Prompt       ┃ Type     ┃ Status ┃ Next Run     ┃ Agent       ┃
+┡━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━╇━━━━━━━━━━╇━━━━━━━━╇━━━━━━━━━━━━━━╇━━━━━━━━━━━━━┩
+│ ea46f0b3414… │ Usa          │ interval │ active │ 2026-11-25T… │ orchestrat… │
+│              │ calculator   │          │        │              │             │
+│              │ para         │          │        │              │             │
+│              │ calcular 7*6 │          │        │              │             │
+│              │ y re...      │          │        │              │             │
+└──────────────┴──────────────┴──────────┴────────┴──────────────┴─────────────┘
+Scheduler running (poll every 5s). Press Ctrl+C to stop.
+
+Scheduler stopped.
+                         Run Logs for ea46f0b341484ed3                          
+┏━━━━┳━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━┳━━━━━━━━━┳━━━━━━━━━━━━━━━━━━┳━━━━━━━┓
+┃ ID ┃ Started          ┃ Finished        ┃ Success ┃ Result           ┃ Error ┃
+┡━━━━╇━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━╇━━━━━━━━━╇━━━━━━━━━━━━━━━━━━╇━━━━━━━┩
+│  1 │ 2026-11-25T06:1… │ 2026-11-25T06:… │ yes     │  Would execute:  │       │
+│    │                  │                 │         │ Usa calculat...  │       │
+└────┴──────────────────┴─────────────────┴─────────┴──────────────────┴───────┘
+== T08b managed agent interval 60s, created 2026-11-25T06:11:35Z
+{"id":"1f258548b6e7","name":"heartbeat-test","agent_type":"orchestrator","config":{"schedule_type":"interval","schedule_value":60,"instruction":"Usa la herramienta calculator para calcular 7*6 y responde exactamente: HEARTBEAT=<resultado>","tools":["calculator"],"max_total_tokens":20000},"status":"idle","summary_memory":"","created_at":1795587095.3278525,"updated_at":1795587095.3278525,"total_tokens":0,"total_cost":0.0,"total_runs":0,"last_run_at":null,"last_activity_at":null,"stall_retries":0,"current_activity":"","input_tokens":0,"output_tokens":0}2026-11-25T06:18:15.329324+00:00 success 17.7 s
+2026-11-25T06:17:14.817034+00:00 success 29.5 s
+2026-11-25T06:13:49.816259+00:00 success 204.0 s
+2026-11-25T06:12:35.405933+00:00 success 73.4 s
+2026-11-25T06:18:33.074996+00:00 HEARTBEAT=42.0 ['calculator', 'cobranza_resumen', 'calculator']
+2026-11-25T06:17:44.309075+00:00 HEARTBEAT=42.0 ['calculator', 'cobranza_resumen', 'calculator']
+2026-11-25T06:17:13.813582+00:00 HEARTBEAT=42.0 ['calculator', 'cobranza_resumen', 'calculator']
+2026-11-25T06:13:48.811533+00:00 HEARTBEAT=42.0 ['calculator']

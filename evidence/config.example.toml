@@ -1,0 +1,63 @@
+# OpenJarvis — configuración de PRUEBAS (sin secretos). Entorno aislado /opt/oj
+[engine]
+default = "ollama"
+
+[engine.ollama]
+host = "http://127.0.0.1:11434"
+
+[intelligence]
+default_model = "qwen3.5:2b"
+temperature = 0.2
+max_tokens = 512
+
+[agent]
+default_agent = "simple"
+max_turns = 6
+context_from_memory = true
+
+[tools]
+# Herramientas mínimas e inocuas. Sin shell_exec / web_search / code_interpreter.
+enabled = ["calculator", "think", "file_read"]
+
+[tools.mcp]
+enabled = true
+
+[memory]
+enabled = true
+backend = "local"
+max_facts = 1000
+
+[server]
+host = "127.0.0.1"
+port = 8000
+
+[security]
+enabled = true
+mode = "block"
+scan_input = true
+scan_output = true
+secret_scanner = true
+pii_scanner = true
+enforce_tool_confirmation = true
+ssrf_protection = true
+rate_limit_enabled = true
+allowed_dirs = ["/opt/oj/workspace"]
+
+[scheduler]
+enabled = true
+poll_interval = 10
+
+[speech]
+backend = "faster-whisper"
+model = "tiny"
+device = "cpu"
+compute_type = "int8"
+tts_backend = "kokoro"
+voice_id = "ef_dora"
+
+[telemetry]
+enabled = true
+
+[analytics]
+enabled = false
+choice_recorded = true

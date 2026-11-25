@@ -1,0 +1,6 @@
+{"ts": "2026-11-25T06:22:31.670059+00:00", "http": "POST", "method": "initialize", "auth_header": "absent"}
+{"ts": "2026-11-25T06:22:31.690365+00:00", "http": "POST", "method": "initialize", "auth_header": "present"}
+{"ts": "2026-11-25T06:22:31.691569+00:00", "http": "POST", "method": "notifications/initialized", "auth_header": "present"}
+{"ts": "2026-11-25T06:22:31.692431+00:00", "http": "POST", "method": "tools/list", "auth_header": "present"}
+{"ts": "2026-11-25T06:22:31.693519+00:00", "http": "POST", "method": "tools/call", "auth_header": "present"}
+{"ts": "2026-11-25T06:22:31.693554+00:00", "tool": "cobranza_resumen", "args": {"min_dias": 40}}

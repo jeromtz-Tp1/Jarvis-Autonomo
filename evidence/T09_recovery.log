@@ -1,0 +1,21 @@
+== T09 2026-11-25T06:19:06Z kill -9 server pid 10621 y ollama pid 10589
+ollama: DOWN pid=10589
+server: DOWN pid=10621
+2026-11-25T06:19:13Z health FAIL (1)
+2026-11-25T06:19:28Z health FAIL (2)
+2026-11-25T06:19:28Z RESTART
+ollama: {"version":"0.40.18"} pid=12973
+server: {"status":"ok"} pid=13005
+== post-recovery 2026-11-25T06:19:39Z
+                                Memory Facts (3)                                
+┏━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━┳━━━━━━━┓
+┃ #    ┃ Fact                                                 ┃ Source ┃ Trust ┃
+┡━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━╇━━━━━━━┩
+│ 1    │ Mi proyecto ficticio se llama Halcon-7 y su código   │ auto   │ auto  │
+│      │ interno es ZX-9931.                                  │        │       │
+│ 2    │ Me llamo OpenJarvis, soy un asistente de IA.         │ auto   │ auto  │
+│ 3    │ El usuario llama a su proyecto ficticio 'Halcon-7'   │ auto   │ auto  │
+RECALL: El código interno del proyecto Halcon-7 es **ZX-9931**.
+agent status: idle total_runs: 4
+T09 nota: runner llama-server huérfano PID 10676 (padre ollama matado con -9) 4.3GB RSS; limpiado manualmente 2026-11-25T06:20:43Z
+Agente heartbeat reanudado tras la caída: ejecuciones 06:18:15 (antes), 06:20:33, 06:21:34, 06:22:34 (después). Ventana perdida 06:19:15 sin recuperación retroactiva.

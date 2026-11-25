@@ -1,0 +1,24 @@
+== orchestrator qwen3.5:2b 05:59:41
+{
+  "content": "El valor total de cuentas por cobrar con m\u00e1s de 10 d\u00edas vencidos es **173300.5 MXN**.",
+  "turns": 2,
+  "tool_results": [
+    {
+      "tool_name": "cobranza_resumen",
+      "content": "{\"fuente\": \"SIMULADOR (datos ficticios)\", \"total_mxn\": 173300.5, \"registros\": [{\"cliente\": \"ACME FICTICIA SA\", \"saldo_mxn\": 125000.5, \"dias_vencido\": 12}, {\"cliente\": \"LOGISTICA DEMO SC\", \"saldo_mxn\": 48300.0, \"dias_vencido\": 45}]}",
+      "success": true
+    }
+  ]
+}
+== orchestrator qwen3.5:4b 05:59:52
+{
+  "content": "El valor total MXN exacto es **173,300.50**.",
+  "turns": 2,
+  "tool_results": [
+    {
+      "tool_name": "cobranza_resumen",
+      "content": "{\"fuente\": \"SIMULADOR (datos ficticios)\", \"total_mxn\": 173300.5, \"registros\": [{\"cliente\": \"ACME FICTICIA SA\", \"saldo_mxn\": 125000.5, \"dias_vencido\": 12}, {\"cliente\": \"LOGISTICA DEMO SC\", \"saldo_mxn\": 48300.0, \"dias_vencido\": 45}]}",
+      "success": true
+    }
+  ]
+}

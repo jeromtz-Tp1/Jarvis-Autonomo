@@ -1,0 +1,1 @@
+[{"name": "mock-bind-readonly", "command": "/usr/bin/python3", "args": ["/opt/oj/mock/mock_bind_mcp.py"], "exclude_tools": ["crear_factura"]}]
