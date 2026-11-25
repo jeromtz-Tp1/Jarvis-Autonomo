@@ -1,0 +1,51 @@
+ollama: {"version":"0.40.18"}
+server: {"status":"ok"}
+
+OpenJarvis Doctor
+
+┏━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ St… ┃ Check                             ┃ Result                             ┃
+┡━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│  ✓  │ Python version                    │ 3.12.3                             │
+│  ✓  │ Config file                       │ /opt/ojlab/home/.openjarvis/confi… │
+│  ✓  │ Config parsing                    │ Config loaded successfully         │
+│  !  │ Engine: apple_fm                  │ Unreachable                        │
+│  i  │ Engine: cloud                     │ Remote or unknown endpoint — not   │
+│     │                                   │ probed (use --probe-remote)        │
+│  !  │ Engine: exo                       │ Unreachable                        │
+│  !  │ Engine: gemma_cpp                 │ Unreachable                        │
+│  !  │ Engine: lemonade                  │ Unreachable                        │
+│  i  │ Engine: litellm                   │ Remote or unknown endpoint — not   │
+│     │                                   │ probed (use --probe-remote)        │
+│  !  │ Engine: llamacpp                  │ Unreachable                        │
+│  !  │ Engine: lmstudio                  │ Unreachable                        │
+│  !  │ Engine: mlx                       │ Unreachable                        │
+│  !  │ Engine: nexa                      │ Unreachable                        │
+│  !  │ Engine: nim                       │ Unreachable                        │
+│  ✓  │ Engine: ollama                    │ Reachable                          │
+│  !  │ Engine: sglang                    │ Unreachable                        │
+│  !  │ Engine: uzu                       │ Unreachable                        │
+│  ✓  │ Engine: vllm                      │ Reachable                          │
+│  ✓  │ Models: ollama                    │ qwen3.5:2b                         │
+│  ✓  │ Models: vllm                      │ qwen3.5:2b                         │
+│  ✓  │ Default model                     │ qwen3.5:2b (on ollama)             │
+│  ✓  │ Optional: REST API server         │ Installed                          │
+│  ✓  │ Optional: SFT/GRPO training       │ Installed                          │
+│  ✓  │ Optional: NVIDIA energy           │ Installed                          │
+│     │ monitoring                        │                                    │
+│  !  │ Optional: AMD energy monitoring   │ Not installed (openjarvis)         │
+│  !  │ Optional: ColBERT memory backend  │ Not installed (openjarvis)         │
+│  !  │ Optional: Apple Silicon energy    │ Not installed (openjarvis)         │
+│     │ monitoring                        │                                    │
+│  !  │ Optional: Apple Foundation Models │ Not installed (openjarvis)         │
+│     │ (AFM 3)                           │                                    │
+│  ✓  │ Speech backend                    │ faster-whisper ready               │
+│  ✓  │ Node.js                           │ v22.23.5                           │
+│  ✓  │ Security profile                  │ Profile 'personal' active          │
+└─────┴───────────────────────────────────┴────────────────────────────────────┘
+
+  14 passed, 15 warnings, 0 failures
+
+Background tasks
+  ✓ Rust extension: ready
+  no model downloads tracked

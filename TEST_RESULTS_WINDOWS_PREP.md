@@ -1,0 +1,47 @@
+# TEST RESULTS — Validación del instalador local (preparación Windows/WSL2)
+
+**Fecha:** 2026-11-25 (UTC) · **Qué se probó:** `windows/wsl/setup_lab.sh` y `windows/wsl/run_acceptance.sh`, que son exactamente lo que `Install-OpenJarvisLab.ps1` ejecuta dentro de la distro WSL. Se usó una instalación **desde cero** en Ubuntu 24.04 (la misma base que la distro WSL) con prefijo nuevo `/opt/ojlab` y usuario nuevo `ojlab`.
+**Qué NO se probó:** la PC de Jerónimo (sin acceso desde esta sesión) ni los `.ps1` en Windows.
+
+## Instalador `setup_lab.sh`
+
+| Ejecución | Resultado | Causa / corrección |
+|---|---|---|
+| 1 | Error en el paso 4 (`git clone`, certificado) | Propio de este contenedor (CA del proxy ilegible para el usuario sin privilegios). Corregido: si existe un CA de sistema/corporativo, se propaga también a `GIT_SSL_CAINFO`. |
+| 2 | Error en el paso 6 (corte de conexión al descargar Ollama, 1.6 GB) | Fallo de red transitorio. Corregido: `curl --retry 5 --retry-all-errors -C -` (reintenta y reanuda). |
+| 3 | OK, pero la precarga de voz falló sin que el script lo advirtiera | Orden del `PATH` (el Python de herramientas iba antes que el del venv). Corregido, y la precarga de voz ahora falla de forma visible. |
+| 4 | **OK (exit 0)**: `rust OK`, `whisper OK`, `kokoro OK`, servicios sanos | Instalación completa en ~6 min con caché; idempotente (relanzarlo salta lo ya hecho). |
+
+Comprobado también:
+- el parche R1/R2 se aplica sobre la revisión fija `ae36ac97`;
+- Rust se instala con `rustup-init` verificado por SHA256;
+- Ollama v0.40.18 se descarga verificado por SHA256;
+- el modelo spaCy queda precargado (R9).
+
+## Aceptación `run_acceptance.sh` (veredicto automático)
+
+Ejecución definitiva: 2026-11-25 19:46:31 → 20:23:08 UTC. Evidencia: `evidence/windows_prep/`.
+
+| ID | Resultado | Evidencia |
+|---|---|---|
+| T01 | **PASS** | `/health` ok; `jarvis doctor`: 14 OK, 0 fallos |
+| T02 | **PASS** | Inferencia local real: `PARIS` |
+| T03 | **PASS** | Dato sintético recordado tras reiniciar los servicios: `ZX-9931` |
+| T04 | **PASS** | `calculator` 12345×6789 = 83810205 |
+| T05 | **PASS** | MCP simulado de solo lectura: total 173300.5; `crear_factura` nunca invocada |
+| T06 | **PASS** | STT: "Hola Harbys, el reporte de cobranza de prueba está listo." (único error: el nombre propio) |
+| T07 | **PASS** | 2 WAV generados por Kokoro; inteligibilidad verificada por STT |
+| T08 | **PASS** | 2 ejecuciones autónomas (19:49:54, 19:50:54), ambas con resultado de herramienta 42 y texto HEARTBEAT |
+| T09 | **PASS** | `kill -9` del servidor → recuperado, memoria intacta, 0 runners huérfanos |
+| T10 | **PASS** | Lectura fuera de `allowed_dirs` denegada |
+| T11 | **PASS** | Inyección indirecta sin acciones; `shell_exec` bloqueado (allowlist estricta + confirmación) |
+| T12 | **PASS** | 30 min: 28/28 respuestas correctas; latencia media ~7 s; servidor 943→944 MB (estable) |
+
+### Incidencias de la ejecución previa (registradas, no ocultadas)
+
+- **T08 FAIL en la primera ejecución**: el agente se ejecutó solo 2 veces y la calculadora devolvió 42.0, pero el modelo respondió `HEARTBEAT=<42.0>` y en otra ejecución agotó los turnos. El fallo estaba en mi criterio, que comparaba texto exacto. Se cambió a un criterio objetivo (resultado de la herramienta + ejecuciones con marca de tiempo) y se reformuló la instrucción. Evidencia: `evidence/windows_prep/first_run_T01-T11_before_T08_fix.log`.
+- **La primera batería terminó con error de sintaxis tras T12** porque edité el script mientras corría (bash lee el archivo por partes). Además, el agente de T08 quedó sin pausar y contaminó las métricas de T12. Corregido: el script pausa el agente justo después de T08, y la ejecución definitiva se lanzó desde una copia congelada.
+
+### Observación de memoria (para la prueba larga)
+
+RAM del runner del modelo: 4177 → 4645 MB en 30 min (+470 MB); el servidor se mantuvo plano (943 → 944 MB). Lo más probable es que sea la caché de contexto de llama.cpp, acotada por `OLLAMA_CONTEXT_LENGTH=8192`. No se pudo confirmar que se estabilice en 30 min. En la PC queda acotado por la slice (`MemoryMax=7G`), y la prueba de 72 h debe confirmar la meseta.
