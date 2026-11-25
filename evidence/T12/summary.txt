@@ -1,0 +1,9 @@
+ventana: 2026-11-25T06:22:26Z -> 2026-11-25T06:53:53Z; peticiones=29 http200=29 correctas=29
+latencia s: min=6.5 mediana=7.3 max=8.2
+total_rss_mb: min=4439 media=4653 max=4888
+server_rss_mb: min=515 media=518 max=519
+runner_rss_mb: min=3888 media=4100 max=4334
+cpu_pct_jarvis_user: min=63 media=76 max=141
+mem_avail_mb: min=10557 media=10782 max=11010
+muestras recursos=64 desde 2026-11-25T06:22:19Z hasta 2026-11-25T06:53:50Z
+server rss inicio/fin: 515 519
