@@ -1,0 +1,62 @@
+# OpenJarvis — configuración PRUEBA 72 h (host compartido con OpenClaw). Sin secretos.
+[engine]
+default = "ollama"
+[engine.ollama]
+host = "http://127.0.0.1:11434"
+
+[intelligence]
+default_model = "qwen3.5:2b"     # 4b solo si el inventario muestra >= 10 GB libres sostenidos
+temperature = 0.2
+max_tokens = 512
+
+[agent]
+default_agent = "orchestrator"   # native_react falló con 2B (T05)
+max_turns = 6
+context_from_memory = true
+
+[tools]
+enabled = ["calculator", "think", "file_read"]   # sin shell/code/web/file_write (R3)
+
+[tools.mcp]
+enabled = true
+servers = "mcp_servers.json"      # SOLO el simulador stdio; BIND no se conecta en 2A/2B
+
+[memory]
+enabled = true
+backend = "local"
+max_facts = 1000
+
+[server]
+host = "127.0.0.1"                # R12: nunca 0.0.0.0 sin auth
+port = 8000
+
+[security]
+profile = "personal"
+enabled = true
+mode = "block"
+scan_input = true
+scan_output = true
+secret_scanner = true
+pii_scanner = true
+enforce_tool_confirmation = true  # efectivo con patches/0001 (R1)
+ssrf_protection = true
+rate_limit_enabled = true
+allowed_dirs = ["/opt/oj/workspace"]
+
+[scheduler]
+enabled = false                   # R10: no usar TaskScheduler (dry-run); usar agentes gestionados
+
+[speech]
+backend = "faster-whisper"
+model = "base"
+device = "cpu"
+compute_type = "int8"
+tts_backend = "kokoro"
+voice_id = "ef_dora"
+
+[skills]
+enabled = false
+
+[analytics]
+enabled = false
+choice_recorded = true

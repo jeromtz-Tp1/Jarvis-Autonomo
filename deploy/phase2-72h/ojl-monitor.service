@@ -1,0 +1,14 @@
+[Unit]
+Description=OpenJarvis trial - health/resource sampler (one shot)
+
+[Service]
+Type=oneshot
+User=jarvis
+Group=jarvis
+ExecStart=/opt/oj/deploy/ojl_monitor.sh
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+ReadWritePaths=/opt/oj/logs
+IPAddressDeny=any
+IPAddressAllow=localhost

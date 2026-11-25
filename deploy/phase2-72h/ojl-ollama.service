@@ -1,0 +1,33 @@
+[Unit]
+Description=OpenJarvis trial - Ollama (loopback only)
+After=network-online.target
+
+[Service]
+Slice=openjarvis.slice
+User=jarvis
+Group=jarvis
+EnvironmentFile=/opt/oj/deploy/ojl.env
+ExecStart=/opt/oj/ollama/bin/ollama serve
+Restart=always
+RestartSec=10
+KillMode=control-group
+TimeoutStopSec=30
+Nice=5
+# Hardening
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=strict
+ProtectHome=yes
+ReadWritePaths=/opt/oj/home /opt/oj/logs
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+RestrictSUIDSGID=yes
+LockPersonality=yes
+CapabilityBoundingSet=
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+IPAddressDeny=any
+IPAddressAllow=localhost
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,4 @@
+2026-11-25 ~13:02 UTC — R4: agente gestionado b2218a01c1ca, tools=["calculator"], mcp_tools=false, instrucción que pide usar cobranza_resumen.
+Resultado: tool_calls = calculator x6 (máx. turnos alcanzado); llamadas al servidor MCP simulado: 0 (calls.log vacío).
+Comparación Fase 1 (sin mcp_tools=false): agente heartbeat invocó cobranza_resumen en 3 de 4 ejecuciones.
+Agente pausado tras la prueba (POST /pause).

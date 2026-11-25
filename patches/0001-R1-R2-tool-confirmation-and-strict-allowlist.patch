@@ -1,0 +1,76 @@
+diff --git a/src/openjarvis/cli/_tool_names.py b/src/openjarvis/cli/_tool_names.py
+index 1f093411..fd04fd4b 100644
+--- a/src/openjarvis/cli/_tool_names.py
++++ b/src/openjarvis/cli/_tool_names.py
+@@ -2,8 +2,12 @@
+ 
+ from __future__ import annotations
+ 
++import logging
++import os
+ from typing import Any
+ 
++logger = logging.getLogger(__name__)
++
+ 
+ def _normalize_tool_names(value: Any) -> list[str]:
+     """Normalize configured tool names from string or list-like values."""
+@@ -30,6 +34,16 @@ def resolve_tool_names(
+     """Resolve tool names, preferring explicit CLI values over config fallbacks."""
+     cli_names = _normalize_tool_names(cli_value)
+     if cli_names:
++        # JARVIS hardening (R2): when OPENJARVIS_STRICT_TOOLS=1 the operator's
++        # configured allowlist is authoritative; CLI flags may only narrow it.
++        if os.environ.get("OPENJARVIS_STRICT_TOOLS") == "1":
++            allowed: set[str] = set()
++            for configured in configured_values:
++                allowed.update(_normalize_tool_names(configured))
++            dropped = [n for n in cli_names if n not in allowed]
++            if dropped:
++                logger.warning("Strict tools: dropping non-allowlisted tools %s", dropped)
++            return [n for n in cli_names if n in allowed]
+         return cli_names
+ 
+     for configured in configured_values:
+diff --git a/src/openjarvis/cli/ask.py b/src/openjarvis/cli/ask.py
+index f4f6423e..9c78fb57 100644
+--- a/src/openjarvis/cli/ask.py
++++ b/src/openjarvis/cli/ask.py
+@@ -364,6 +364,19 @@ def _build_tools(
+     return tools
+ 
+ 
++def _tool_confirm_callback(config):
++    """JARVIS hardening (R1): honour security.enforce_tool_confirmation.
++
++    Interactive TTY -> ask the human; non-interactive -> deny. Only when the
++    operator disables enforcement do sensitive tools run unattended.
++    """
++    if not getattr(config.security, "enforce_tool_confirmation", True):
++        return lambda prompt: True
++    if sys.stdin.isatty():
++        return lambda prompt: click.confirm(prompt, default=False)
++    return lambda prompt: False
++
++
+ def _run_agent(
+     agent_name: str,
+     query_text: str,
+@@ -440,7 +453,7 @@ def _run_agent(
+                 capability_policy=capability_policy,
+                 agent_id=getattr(agent_cls, "agent_id", agent_name),
+                 interactive=True,
+-                confirm_callback=lambda prompt: True,
++                confirm_callback=_tool_confirm_callback(config),
+             )
+             skill_manager = SkillManager(
+                 bus,
+@@ -478,7 +491,7 @@ def _run_agent(
+         agent_kwargs["tools"] = tools
+         agent_kwargs["max_turns"] = config.agent.max_turns
+         agent_kwargs["interactive"] = True
+-        agent_kwargs["confirm_callback"] = lambda prompt: True
++        agent_kwargs["confirm_callback"] = _tool_confirm_callback(config)
+         agent_kwargs["agent_id"] = agent_name
+         if capability_policy is not None:
+             agent_kwargs["capability_policy"] = capability_policy

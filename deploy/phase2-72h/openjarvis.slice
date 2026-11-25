@@ -1,0 +1,13 @@
+# Presupuesto TOTAL de OpenJarvis en el host compartido (protege a OpenClaw).
+# Ajustar tras el inventario: MemoryMax <= 50% de MemAvailable observado en hora pico.
+[Unit]
+Description=OpenJarvis test slice (72h trial, resource-capped)
+
+[Slice]
+MemoryHigh=6G
+MemoryMax=7G
+MemorySwapMax=0
+CPUQuota=200%
+CPUWeight=50
+IOWeight=50
+TasksMax=512

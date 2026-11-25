@@ -1,0 +1,4 @@
+resp: ¡Hola! 👋 ¿En qué puedo ayudarte hoy? ¿Ne
+CTX=4096 runner RSS MB: 3495  lat=4.829s
+resp: ¡Hola! 👋 ¿En qué puedo ayudarte hoy? Pue
+CTX=8192 runner RSS MB: 3539  lat=5.258s

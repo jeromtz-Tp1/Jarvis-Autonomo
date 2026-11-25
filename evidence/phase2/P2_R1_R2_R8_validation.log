@@ -1,0 +1,41 @@
+== R1 parche (sin modo estricto): shell_exec concedido por CLI, stdin no-TTY 12:59:24
+      "success": false
+    },
+    {
+      "tool_name": "shell_exec",
+      "content": "Loop guard: Loop detected: identical call to 'shell_exec' with same arguments",
+      "success": false
+    },
+    {
+      "tool_name": "shell_exec",
+      "content": "Loop guard: Loop detected: identical call to 'shell_exec' with same arguments",
+      "success": false
+    }
+  ]
+}
+== R2 parche OPENJARVIS_STRICT_TOOLS=1: --tools shell_exec,calculator 13:01:30
+      "success": false
+    },
+    {
+      "tool_name": "calculator",
+      "content": "4.0",
+      "success": true
+    },
+    {
+      "tool_name": "calculator",
+      "content": "Loop guard: Loop detected: identical call to 'calculator' with same arguments",
+      "success": false
+    }
+  ]
+}
+== tool_calls desde 12:59 UTC (trazas):
+13:01:40 {"tool": "calculator", "arguments": {"expression": "2+2"}} => {"success": true, "result": "4.0"}
+13:01:41 {"tool": "calculator", "arguments": {"expression": "id"}} => {"success": false, "result": "Error: could not convert string to float: \"Error evaluating 'id': Evaluation error: unknown variable `id`.\""
+13:01:43 {"tool": "calculator", "arguments": {"expression": "2+2"}} => {"success": true, "result": "4.0"}
+respuesta: I'm seeing a loop detection issue. Let me try a different approach - perhaps using the `whoami` command instead, which should give me information about the current user:
+ - shell_exec False Tool 'shell_exec' execution denied by user.
+ - shell_exec False Tool 'shell_exec' execution denied by user.
+ - shell_exec False Tool 'shell_exec' execution denied by user.
+ - shell_exec False Loop guard: Loop detected: identical call to 'shell_exec' with same arguments
+ - shell_exec False Loop guard: Loop detected: identical call to 'shell_exec' with same arguments
+ - shell_exec False Loop guard: Loop detected: identical call to 'shell_exec' with same arguments

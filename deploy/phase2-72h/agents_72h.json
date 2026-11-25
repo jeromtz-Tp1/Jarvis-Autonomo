@@ -1,0 +1,10 @@
+[
+  {"name": "trial-heartbeat", "agent_type": "orchestrator",
+   "config": {"schedule_type": "interval", "schedule_value": 900, "tools": ["calculator"], "mcp_tools": false,
+              "instruction": "Usa calculator para 7*6 y responde exactamente HEARTBEAT=<resultado>.",
+              "max_total_tokens": 600000}},
+  {"name": "trial-mock-cobranza", "agent_type": "orchestrator",
+   "config": {"schedule_type": "cron", "schedule_value": "7 */4 * * *", "tools": ["calculator", "cobranza_resumen"],
+              "instruction": "Consulta cobranza_resumen con min_dias=30 (simulador, datos ficticios) y resume total y número de clientes en una línea.",
+              "max_total_tokens": 300000}}
+]
