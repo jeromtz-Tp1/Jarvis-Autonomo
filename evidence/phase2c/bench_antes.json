@@ -1,0 +1,284 @@
+{
+ "label": "antes",
+ "fecha_utc": "2026-11-26T21:08:01Z",
+ "server_mode": "agent",
+ "cpus": 4,
+ "mem_mb": 16087,
+ "errores": [],
+ "stt_audio_s": 3.48,
+ "stt_ms": {
+  "n": 2,
+  "p50": 966,
+  "min": 961,
+  "max": 971
+ },
+ "stt_texto": "Hola Harbys, el reporte de cobranza de prueba está listo.",
+ "stt_ok": true,
+ "tts_ms": {
+  "n": 2,
+  "p50": 1159,
+  "min": 1007,
+  "max": 1311
+ },
+ "tts_audio_s": 3.83,
+ "modelos": {
+  "qwen3.5:2b": {
+   "carga_ms": 3733,
+   "sin_razonamiento": {
+    "wall_ms": {
+     "n": 2,
+     "p50": 434,
+     "min": 427,
+     "max": 440
+    },
+    "muestra": {
+     "wall_ms": 427,
+     "tokens_salida": 8,
+     "tokens_entrada": 77,
+     "tok_s_generacion": 23.8,
+     "tok_s_prompt": 897.4,
+     "razonamiento_chars": 0,
+     "texto": "La capital de Francia es París."
+    }
+   },
+   "con_razonamiento": {
+    "wall_ms": 20251,
+    "tokens_salida": 385,
+    "tokens_entrada": 75,
+    "tok_s_generacion": 19.1,
+    "tok_s_prompt": 999.7,
+    "razonamiento_chars": 1412,
+    "texto": "La capital de Francia es París."
+   },
+   "hilos": {
+    "2": {
+     "wall_ms": {
+      "n": 1,
+      "p50": 791,
+      "min": 791,
+      "max": 791
+     },
+     "tok_s_generacion": 12.2,
+     "tok_s_prompt": 580.2
+    },
+    "4": {
+     "wall_ms": {
+      "n": 1,
+      "p50": 442,
+      "min": 442,
+      "max": 442
+     },
+     "tok_s_generacion": 22.7,
+     "tok_s_prompt": 890.1
+    }
+   },
+   "calidad_detalle": [
+    {
+     "pregunta": "¿Cuál es la capital de Francia?",
+     "ok": true,
+     "breve": true,
+     "ms": 3908,
+     "respuesta": "La capital de Francia es París."
+    },
+    {
+     "pregunta": "¿Cuánto es 15 por 4?",
+     "ok": true,
+     "breve": true,
+     "ms": 1385,
+     "respuesta": "El resultado de multiplicar 15 por 4 es 60."
+    },
+    {
+     "pregunta": "¿Qué día de la semana viene después del viernes?",
+     "ok": false,
+     "breve": true,
+     "ms": 746,
+     "respuesta": "Lunes."
+    },
+    {
+     "pregunta": "¿Cuántas horas tiene un día?",
+     "ok": true,
+     "breve": true,
+     "ms": 964,
+     "respuesta": "Un día tiene 24 horas."
+    },
+    {
+     "pregunta": "Traduce al inglés: buenos días.",
+     "ok": true,
+     "breve": true,
+     "ms": 758,
+     "respuesta": "Good morning."
+    },
+    {
+     "pregunta": "Responde sí o no: ¿el agua hierve a 100 grados al nivel del mar?",
+     "ok": true,
+     "breve": true,
+     "ms": 1866,
+     "respuesta": "Sí, el agua hierve a 100 grados Celsius al nivel del mar bajo presión atmosférica normal."
+    },
+    {
+     "pregunta": "¿Cuál es el planeta más grande del sistema solar?",
+     "ok": true,
+     "breve": true,
+     "ms": 2561,
+     "respuesta": "El planeta más grande del sistema solar es Júpiter. Es un gigante gaseoso que pesa aproximadamente tres veces más que todos los demás planetas juntos."
+    },
+    {
+     "pregunta": "Saluda brevemente a Jerónimo.",
+     "ok": true,
+     "breve": true,
+     "ms": 1642,
+     "respuesta": "¡Hola Jerónimo! Soy JARVIS, tu asistente personal. ¿En qué puedo ayudarte hoy?"
+    }
+   ],
+   "modelo_ms": {
+    "n": 8,
+    "p50": 1514,
+    "min": 746,
+    "max": 3908
+   },
+   "calidad": "7/8",
+   "calidad_pct": 88,
+   "brevedad": "8/8"
+  },
+  "qwen3.5:4b": {
+   "carga_ms": 6293,
+   "sin_razonamiento": {
+    "wall_ms": {
+     "n": 2,
+     "p50": 1232,
+     "min": 1190,
+     "max": 1274
+    },
+    "muestra": {
+     "wall_ms": 1274,
+     "tokens_salida": 8,
+     "tokens_entrada": 77,
+     "tok_s_generacion": 8.1,
+     "tok_s_prompt": 277.6,
+     "razonamiento_chars": 0,
+     "texto": "La capital de Francia es París."
+    }
+   },
+   "con_razonamiento": {
+    "wall_ms": 56906,
+    "tokens_salida": 401,
+    "tokens_entrada": 75,
+    "tok_s_generacion": 7.1,
+    "tok_s_prompt": 301.1,
+    "razonamiento_chars": 1436,
+    "texto": "La capital de Francia es París."
+   },
+   "hilos": {
+    "2": {
+     "wall_ms": {
+      "n": 1,
+      "p50": 2045,
+      "min": 2045,
+      "max": 2045
+     },
+     "tok_s_generacion": 5.0,
+     "tok_s_prompt": 176.3
+    },
+    "4": {
+     "wall_ms": {
+      "n": 1,
+      "p50": 1111,
+      "min": 1111,
+      "max": 1111
+     },
+     "tok_s_generacion": 9.1,
+     "tok_s_prompt": 336.3
+    }
+   },
+   "calidad_detalle": [
+    {
+     "pregunta": "¿Cuál es la capital de Francia?",
+     "ok": true,
+     "breve": true,
+     "ms": 6305,
+     "respuesta": "La capital de Francia es París."
+    },
+    {
+     "pregunta": "¿Cuánto es 15 por 4?",
+     "ok": true,
+     "breve": true,
+     "ms": 2199,
+     "respuesta": "El resultado es sesenta."
+    },
+    {
+     "pregunta": "¿Qué día de la semana viene después del viernes?",
+     "ok": true,
+     "breve": true,
+     "ms": 2834,
+     "respuesta": "El día que viene después del viernes es el sábado."
+    },
+    {
+     "pregunta": "¿Cuántas horas tiene un día?",
+     "ok": false,
+     "breve": true,
+     "ms": 2482,
+     "respuesta": "Un día tiene veicuatro horas."
+    },
+    {
+     "pregunta": "Traduce al inglés: buenos días.",
+     "ok": true,
+     "breve": true,
+     "ms": 2677,
+     "respuesta": "Good morning. How can I assist you today?"
+    },
+    {
+     "pregunta": "Responde sí o no: ¿el agua hierve a 100 grados al nivel del mar?",
+     "ok": true,
+     "breve": true,
+     "ms": 3781,
+     "respuesta": "Sí, el agua hierve a 100 grados Celsius al nivel del mar."
+    },
+    {
+     "pregunta": "¿Cuál es el planeta más grande del sistema solar?",
+     "ok": true,
+     "breve": true,
+     "ms": 5932,
+     "respuesta": "El planeta más grande del sistema solar es Júpiter. Es un gigante gaseoso que tiene una masa mucho mayor que la de todos los demás planetas juntos."
+    },
+    {
+     "pregunta": "Saluda brevemente a Jerónimo.",
+     "ok": true,
+     "breve": true,
+     "ms": 3665,
+     "respuesta": "Hola, Jerónimo. Estoy listo para ayudarte con lo que necesites hoy."
+    }
+   ],
+   "modelo_ms": {
+    "n": 8,
+    "p50": 3250,
+    "min": 2199,
+    "max": 6305
+   },
+   "calidad": "7/8",
+   "calidad_pct": 88,
+   "brevedad": "8/8"
+  }
+ },
+ "servidor": {
+  "modelo": "qwen3.5:2b",
+  "modo": "agent",
+  "pausa_s": 8.0,
+  "ms": {
+   "n": 3,
+   "p50": 6219,
+   "min": 6179,
+   "max": 17756
+  },
+  "primer_token_ms": null
+ },
+ "voz_total_ms": {
+  "n": 2,
+  "p50": 15788,
+  "min": 8328,
+  "max": 23248
+ },
+ "voz_primera_voz_ms": null,
+ "voz_desglose": {
+  "nota": "sin desglose (versión anterior de ojvoice)"
+ }
+}

@@ -94,7 +94,7 @@ if ($LASTEXITCODE) {
   if (-not $unc) { Res 'Paquete' $false 'no se pudo copiar a la distro'; Finish 3 }
   foreach ($f in $BundleFiles) { $dst = Join-Path $unc $f; New-Item -ItemType Directory -Force -Path (Split-Path $dst) | Out-Null; Copy-Item -Recurse -Force (Join-Path $Bundle $f) $dst } }
 Remove-Item $tarFile -ErrorAction SilentlyContinue
-[void](InDistroOut 'cd /root/oj-bundle && find . -type f ! -name ''*.wav'' -exec sed -i ''s/\r$//'' {} + && sha256sum --quiet -c windows/BUNDLE_MANIFEST.sha256')
+[void](InDistroOut 'cd /root/oj-bundle && find . -type f ! -name ''*.wav'' ! -name ''*.pyc'' -exec sed -i ''s/\r$//'' {} + && sha256sum --quiet -c windows/BUNDLE_MANIFEST.sha256')
 if ($script:rc) { Res 'Paquete' $false 'verificación SHA256 fallida: archivos alterados o incompletos'; Finish 3 }
 Res 'Paquete' $true 'scripts copiados y verificados (SHA256)'
 

@@ -95,7 +95,7 @@ if ($LASTEXITCODE) {
 }
 Remove-Item $tarFile -ErrorAction SilentlyContinue
 # 5b. Normaliza finales de línea (ZIP/git en Windows pueden convertir a CRLF) y verifica integridad
-InDistro "cd /root/oj-bundle && find . -type f ! -name '*.wav' -exec sed -i 's/\r$//' {} + && sha256sum --quiet -c windows/BUNDLE_MANIFEST.sha256 && echo 'entregables verificados (SHA256)'"
+InDistro "cd /root/oj-bundle && find . -type f ! -name '*.wav' ! -name '*.pyc' -exec sed -i 's/\r$//' {} + && sha256sum --quiet -c windows/BUNDLE_MANIFEST.sha256 && echo 'entregables verificados (SHA256)'"
 InDistro "bash /root/oj-bundle/windows/wsl/setup_lab.sh --prefix /opt/oj --user jarvis --model '$Model' --gpu auto"
 Log 'Paso 6/6: recursos persistentes, WSL activo y pruebas independientes (Repair-OpenJarvisLab.ps1)'
 & (Join-Path $PSScriptRoot 'Repair-OpenJarvisLab.ps1') -InstallDir $InstallDir

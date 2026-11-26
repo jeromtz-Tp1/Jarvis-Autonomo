@@ -78,6 +78,42 @@ Antes, el autodiagnóstico daba OK si existía `memory_facts.jsonl` **o** `memor
 
 Si el archivo no existe, si se registran 0 hechos o si no hay recuerdo, el resultado es **FALLO**.
 
-## 6. Resultados de la validación
+## 6. Resultados de la validación (laboratorio, 2026-11-26 21:08–21:18 UTC)
 
-(ver sección siguiente, generada con la validación definitiva)
+Ejecución completa del mismo flujo que `Optimize-OpenJarvisLab.ps1` (antes → aplicar → intermedio → selección → después → memoria → reversión) en el laboratorio: **4 vCPU Xeon 2.1 GHz, sin GPU** (el Core Ultra 7 258V debería ser más rápido). Turnos separados 8 s (tiempo realista de escucha y respuesta). Evidencia: `evidence/phase2c/`.
+
+| Métrica (p50) | Antes | Después | Mejora |
+|---|---|---|---|
+| **Voz extremo a extremo** (STT → JARVIS → voz completa) | **15.8 s** | **4.96 s** | **3.2×** |
+| Primera voz audible | 15.8 s | **4.86 s** | 3.3× |
+| Respuesta sencilla por el servidor | 6.2 s (entre 6.2 y 17.8 s) | **1.87 s** | 3.3× |
+| Primer token del servidor | — | 1.35 s | — |
+| STT (audio de 3.5 s) | 0.95 s | 1.0 s | = |
+| TTS (frase de 4 s) | 1.2 s | 1.2 s | = |
+
+Desglose de un turno de voz después de optimizar: STT 1.0 s · primer token 0.13 s · respuesta completa del modelo 1.34 s · síntesis de la frase 2.3 s → **4.65 s en total**.
+
+**Meta < 5 s:** cumplida en el laboratorio con el 2B (4.96 s p50; el peor turno, 7.3 s). En el Core Ultra 7 el script vuelve a medir y elige: si allí el 4B cumple la meta, lo selecciona por su mejor calidad.
+
+**Calidad (8 preguntas verificables, varias pasadas):**
+- **2B:** entre 7/8 y 8/8. Falla de forma recurrente en «¿qué día viene después del viernes?», a la que responde «lunes».
+- **4B:** 7/8. Escribe «veicuatro» por «veinticuatro», lo que también afecta a la lectura en voz alta.
+- **Brevedad:** 8/8 en ambos.
+- **Velocidad:** el 4B es 2.5–3 veces más lento por respuesta en este laboratorio (3.4 s frente a 1.3 s).
+
+**Memoria (prueba real):** hecho escrito y presente en el archivo → recordado tras reiniciar el servidor → la extracción automática guardó un hecho nuevo. **Las pruebas no dejaron datos:** misma huella SHA256 del archivo de hechos antes y después (129 hechos).
+
+**Reversibilidad:** `revert` dejó `config.toml`, `ojenv.sh` y `ojvoice.sh` con huellas idénticas a las originales, retiró los parches 0004, 0003 y 0002 (queda solo el 0001 de seguridad) y eliminó el modelo derivado sin tocar los pesos base.
+
+### Hallazgos durante la optimización (lo que no funcionó a la primera)
+- El primer diseño reducía la memoria a 512 tokens, pero el primer token seguía en ~4.8 s. Con un **proxy de registro** entre el servidor y Ollama se midió que el servidor tarda 0.01–0.1 s y que el tiempo restante era el procesamiento del prompt: ~3200 caracteres de hechos y la caché de prefijo vaciada por la extracción. Limitar a los **8 hechos más relevantes** bajó el primer token a **1.0–1.2 s**.
+- El banco inicial intercalaba 2B y 4B en el servidor y **forzaba intercambios de modelo** en Ollama, con tiempos de 31 s que no reflejan el uso real. Se corrigió: los modelos se comparan en Ollama directo y el servidor se mide solo con su modelo configurado.
+- Cambiar `num_thread` obliga a recargar el modelo y distorsionaba la prueba de hilos. Se añadió una llamada de calentamiento descartada.
+- Ollama 0.40 guarda los modelos **creados** en `manifests-v2/` y los **descargados** en `manifests/`. La detección de modelos ahora acepta ambos formatos; afectaba también a `Repair`.
+- El banco **contaminaba la memoria** con trivialidades, como «el usuario pregunta qué día sigue al viernes». Ahora hay una instantánea y restauración obligatoria (`memsnap`).
+- `Repair-OpenJarvisLab.ps1` habría **borrado la optimización** al regenerar `ojenv.sh` y `ojl.env`. Ahora la conserva.
+
+### Lo que no se pudo validar aquí
+- **La Intel Arc 140V y el Ollama nativo de Windows (`-GpuEval`):** el laboratorio no tiene Windows ni GPU. La medición la hará el script en la PC y la dejará en `gpu_eval.json`.
+- **Los `.ps1`** (`Optimize`, `Talk-Jarvis` con reproducción por fragmentos): revisados línea a línea, con BOM UTF-8 y CRLF, pero **no ejecutados en Windows**. La parte Linux que invocan sí está validada de principio a fin.
+- **systemd** (servicio de precarga, cuota de CPU de la slice): la sintaxis está verificada, pero no hay systemd como PID 1 en el contenedor. En la PC lo comprueba el autodiagnóstico del script.

@@ -42,7 +42,7 @@ function Copy-Bundle {
   [void](X 'rm -rf /root/oj-bundle && install -d -m 700 /root/oj-bundle')
   & cmd.exe /d /c "wsl.exe -d $Distro -u root --exec tar -xf - -C /root/oj-bundle < `"$tarFile`""; if ($LASTEXITCODE) { throw 'no se pudo copiar el paquete a la distro' }
   Remove-Item $tarFile -ErrorAction SilentlyContinue
-  [void](X 'cd /root/oj-bundle && find . -type f ! -name ''*.wav'' -exec sed -i ''s/\r$//'' {} + && sha256sum --quiet -c windows/BUNDLE_MANIFEST.sha256 && echo paquete-verificado')
+  [void](X 'cd /root/oj-bundle && find . -type f ! -name ''*.wav'' ! -name ''*.pyc'' -exec sed -i ''s/\r$//'' {} + && sha256sum --quiet -c windows/BUNDLE_MANIFEST.sha256 && echo paquete-verificado')
   if ($script:rc) { throw 'verificación SHA256 del paquete fallida' } }
 function Bench([string]$label, [string]$models, [string]$mode, [string]$serverModel, [string]$threads = '', [switch]$Voice, [switch]$Think) {
   $t = if ($threads) { "--threads $threads" } else { '' }

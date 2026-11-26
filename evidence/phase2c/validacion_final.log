@@ -1,0 +1,85 @@
+  [OK]   memoria del usuario guardada antes de las pruebas (129 hechos)
+== ANTES
+{"label": "antes", "fecha_utc": "2026-11-26T21:08:01Z", "server_mode": "agent", "cpus": 4, "mem_mb": 16087, "errores": [], "stt_audio_s": 3.48, "stt_ms": {"n": 2, "p50": 966, "min": 961, "max": 971}, "stt_texto": "Hola Harbys, el reporte de cobranza de prueba está listo.", "stt_ok": true, "tts_ms": {"n": 2, "p50": 1159, "min": 1007, "max": 1311}, "tts_audio_s": 3.83, "servidor": {"modelo": "qwen3.5:2b", "modo": "agent", "pausa_s": 8.0, "ms": {"n": 3, "p50": 6219, "min": 6179, "max": 17756}, "primer_token_ms": null}, "voz_total_ms": {"n": 2, "p50": 15788, "min": 8328, "max": 23248}, "voz_primera_voz_ms": null, "voz_desglose": {"nota": "sin desglose (versión anterior de ojvoice)"}}
+qwen3.5:2b {"carga_ms": 3733, "modelo_ms": {"n": 8, "p50": 1514, "min": 746, "max": 3908}, "calidad": "7/8", "brevedad": "8/8"}
+qwen3.5:4b {"carga_ms": 6293, "modelo_ms": {"n": 8, "p50": 3250, "min": 2199, "max": 6305}, "calidad": "7/8", "brevedad": "8/8"}
+servidor {"modelo": "qwen3.5:2b", "modo": "agent", "pausa_s": 8.0, "ms": {"n": 3, "p50": 6219, "min": 6179, "max": 17756}, "primer_token_ms": null}
+== APPLY 1
+[21:12:38] Optimización: modelo base qwen3.5:2b, hilos 4, contexto 4096
+  [OK]   parche 0002 aplicado
+  [OK]   parche 0003 aplicado
+  [OK]   parche 0004 aplicado
+  [OK]   entorno: contexto 4096, modelo residente, STT beam=1 + VAD, memoria por relevancia (8 hechos, 256 tokens) y extracción diferida
+  [OK]   voz por streaming directo (server.agent=simple) y sin herramienta 'think'
+  [OK]   modelo jarvis-voz:2b (hilos=4, ctx=4096) como predeterminado
+precarga completada 2026-11-26T21:13:04Z modelo=jarvis-voz:2b
+  [OK]   servicios reiniciados y precargados
+rc=0
+== INTERMEDIO
+{"label": "intermedio", "fecha_utc": "2026-11-26T21:13:04Z", "server_mode": "stream", "cpus": 4, "mem_mb": 16087, "errores": [], "stt_audio_s": 3.48, "stt_ms": {"n": 2, "p50": 986, "min": 986, "max": 987}, "stt_texto": "Hola Harbys, el reporte de cobranza de prueba está listo.", "stt_ok": true, "tts_ms": {"n": 2, "p50": 1366, "min": 1348, "max": 1385}, "tts_audio_s": 3.83, "servidor": {"modelo": "jarvis-voz:2b", "modo": "stream", "pausa_s": 8.0, "ms": {"n": 3, "p50": 1891, "min": 1515, "max": 2048}, "primer_token_ms": {"n": 3, "p50": 1269, "min": 1125, "max": 1353}}}
+qwen3.5:2b {"carga_ms": 4218, "modelo_ms": {"n": 8, "p50": 1335, "min": 718, "max": 4309}, "calidad": "8/8", "brevedad": "8/8"}
+qwen3.5:4b {"carga_ms": 6445, "modelo_ms": {"n": 8, "p50": 3427, "min": 2323, "max": 6109}, "calidad": "7/8", "brevedad": "8/8"}
+servidor {"modelo": "jarvis-voz:2b", "modo": "stream", "pausa_s": 8.0, "ms": {"n": 3, "p50": 1891, "min": 1515, "max": 2048}, "primer_token_ms": {"n": 3, "p50": 1269, "min": 1125, "max": 1353}}
+== SELECT
+{"model": "qwen3.5:2b", "threads": 4, "estimado_ms": 3697, "meta_ms": 5000, "cumple_meta": true, "motivo": "el modelo más rápido que cumple la meta con calidad suficiente", "candidatos": [{"model": "qwen3.5:2b", "calidad_pct": 100, "brevedad": "8/8", "estimado_ms": 3697, "modelo_p50_ms": 1335, "sobrecoste_servidor_ms": 556, "apto_calidad": true, "mejores_hilos": "4"}, {"model": "qwen3.5:4b", "calidad_pct": 88, "brevedad": "8/8", "estimado_ms": 5789, "modelo_p50_ms": 3427, "sobrecoste_servidor_ms": 556, "apto_calidad": true, "mejores_hilos": "4"}]}
+== APPLY 2 (qwen3.5:2b, 4 hilos)
+[21:15:13] Optimización: modelo base qwen3.5:2b, hilos 4, contexto 4096
+  [OK]   parche 0002 ya presente
+  [OK]   parche 0003 ya presente
+  [OK]   parche 0004 ya presente
+  [OK]   entorno: contexto 4096, modelo residente, STT beam=1 + VAD, memoria por relevancia (8 hechos, 256 tokens) y extracción diferida
+  [OK]   voz por streaming directo (server.agent=simple) y sin herramienta 'think'
+  [OK]   modelo jarvis-voz:2b (hilos=4, ctx=4096) como predeterminado
+precarga completada 2026-11-26T21:15:39Z modelo=jarvis-voz:2b
+  [OK]   servicios reiniciados y precargados
+rc=0
+== DESPUES (jarvis-voz:2b)
+{"label": "despues", "fecha_utc": "2026-11-26T21:15:39Z", "server_mode": "stream", "cpus": 4, "mem_mb": 16087, "errores": [], "stt_audio_s": 3.48, "stt_ms": {"n": 3, "p50": 995, "min": 989, "max": 1004}, "stt_texto": "Hola Harbys, el reporte de cobranza de prueba está listo.", "stt_ok": true, "tts_ms": {"n": 3, "p50": 1220, "min": 1108, "max": 1256}, "tts_audio_s": 3.83, "servidor": {"modelo": "jarvis-voz:2b", "modo": "stream", "pausa_s": 8.0, "ms": {"n": 4, "p50": 1869, "min": 1766, "max": 2336}, "primer_token_ms": {"n": 4, "p50": 1347, "min": 1298, "max": 1480}}, "voz_total_ms": {"n": 3, "p50": 4962, "min": 4728, "max": 7302}, "voz_primera_voz_ms": {"n": 3, "p50": 4863, "min": 4653, "max": 7202}, "voz_desglose": {"stt_ms": "1016", "llm_primer_token_ms": "133", "llm_ms": "1343", "tts_espera_tras_llm_ms": "2258", "primera_voz_ms": "4653", "total_ms": "4654", "tts_ms_primera_frase": "2355", "frases": "1"}}
+jarvis-voz:2b {"carga_ms": 1006, "modelo_ms": {"n": 8, "p50": 1228, "min": 518, "max": 2495}, "calidad": "7/8", "brevedad": "8/8"}
+servidor {"modelo": "jarvis-voz:2b", "modo": "stream", "pausa_s": 8.0, "ms": {"n": 4, "p50": 1869, "min": 1766, "max": 2336}, "primer_token_ms": {"n": 4, "p50": 1347, "min": 1298, "max": 1480}}
+== SELFTEST
+[21:17:22] Autodiagnóstico (evidencia en /opt/ojlab/optimize/selftest_despues)
+  [OK]   Inferencia (jarvis-voz:2b): 17+25 -> 42 en 2 s
+  [OK]   STT: Hola Harbys, el reporte de cobranza de prueba está listo.
+  [OK]   TTS: WAV de 88844 bytes
+  [OK]   Voz extremo a extremo: JARVIS: El código interno de tu proyecto ficticio Halcon-7 es ZX-9931.
+  [OK]   Memoria: archivo /opt/ojlab/home/.openjarvis/memory_facts.jsonl existe y contiene el hecho de verificación (131 hechos)
+  [OK]   Memoria: recordado tras reiniciar el servidor (MEM-7731)
+  [OK]   Memoria: la extracción automática guardó un hecho nuevo (131 -> 133 hechos)
+  [OK]   Seguridad: API y Ollama solo en 127.0.0.1
+  [OK]   Seguridad: allowlist estricta y modo block activos
+  [AVISO] systemd no es PID 1: límites de recursos y bloqueo de red de systemd no activos
+  [OK]   Aislamiento WSL: unidades de Windows no montadas
+SELFTEST_FAILS=0
+== VOZ FRAMES
+exit=0
+TÚ: Hola Harbys, el reporte de cobranza de prueba está listo.
+JARVIS: El código interno de tu proyecto ficticio Halcon-7 es ZX-9931.
+TIEMPOS: stt_ms=963 llm_primer_token_ms=2479 llm_ms=3647 tts_espera_tras_llm_ms=6054 primera_voz_ms=10692 total_ms=10693 tts_ms_primera_frase=6166 frases=1
+== MEMSNAP RESTORE
+  [OK]   memoria del usuario restaurada: las pruebas no dejaron datos (129 hechos)
+/opt/ojlab/home/.openjarvis/memory_facts.jsonl: OK
+== STATUS
+OPTIMIZACIÓN APLICADA
+  modelo: jarvis-voz:2b  (anterior: qwen3.5:2b)
+  OLLAMA_KEEP_ALIVE=30m
+  JARVIS_NUM_CTX=4096
+  OLLAMA_KEEP_ALIVE=-1
+  OJ_STT_BEAM_SIZE=1
+  OJ_STT_VAD=1
+  OJ_STT_NO_PREV_TEXT=1
+  [server]
+  host = "127.0.0.1"                # R12: nunca 0.0.0.0 sin auth
+  port = 8000
+== REVERT
+[21:18:17] Revirtiendo optimización
+  [OK]   parche 0004 retirado
+  [OK]   parche 0003 retirado
+  [OK]   parche 0002 retirado
+  [OK]   modelo derivado jarvis-voz:2b eliminado (los pesos base se conservan)
+  [OK]   estado anterior restaurado (modelo: qwen3.5:2b)
+rc=0
+/opt/ojlab/home/.openjarvis/config.toml: OK
+/opt/ojlab/bin/ojenv.sh: OK
+/opt/ojlab/bin/ojvoice.sh: OK
+OPT_DONE

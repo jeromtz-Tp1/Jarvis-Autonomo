@@ -1,0 +1,152 @@
+{
+ "label": "despues",
+ "fecha_utc": "2026-11-26T21:15:39Z",
+ "server_mode": "stream",
+ "cpus": 4,
+ "mem_mb": 16087,
+ "errores": [],
+ "stt_audio_s": 3.48,
+ "stt_ms": {
+  "n": 3,
+  "p50": 995,
+  "min": 989,
+  "max": 1004
+ },
+ "stt_texto": "Hola Harbys, el reporte de cobranza de prueba está listo.",
+ "stt_ok": true,
+ "tts_ms": {
+  "n": 3,
+  "p50": 1220,
+  "min": 1108,
+  "max": 1256
+ },
+ "tts_audio_s": 3.83,
+ "modelos": {
+  "jarvis-voz:2b": {
+   "carga_ms": 1006,
+   "sin_razonamiento": {
+    "wall_ms": {
+     "n": 3,
+     "p50": 497,
+     "min": 450,
+     "max": 510
+    },
+    "muestra": {
+     "wall_ms": 510,
+     "tokens_salida": 8,
+     "tokens_entrada": 77,
+     "tok_s_generacion": 19.2,
+     "tok_s_prompt": 869.9,
+     "razonamiento_chars": 0,
+     "texto": "La capital de Francia es París."
+    }
+   },
+   "calidad_detalle": [
+    {
+     "pregunta": "¿Cuál es la capital de Francia?",
+     "ok": true,
+     "breve": true,
+     "ms": 518,
+     "respuesta": "La capital de Francia es París."
+    },
+    {
+     "pregunta": "¿Cuánto es 15 por 4?",
+     "ok": true,
+     "breve": true,
+     "ms": 1480,
+     "respuesta": "El resultado de multiplicar 15 por 4 es 60."
+    },
+    {
+     "pregunta": "¿Qué día de la semana viene después del viernes?",
+     "ok": false,
+     "breve": true,
+     "ms": 699,
+     "respuesta": "Lunes"
+    },
+    {
+     "pregunta": "¿Cuántas horas tiene un día?",
+     "ok": true,
+     "breve": true,
+     "ms": 977,
+     "respuesta": "Un día tiene 24 horas."
+    },
+    {
+     "pregunta": "Traduce al inglés: buenos días.",
+     "ok": true,
+     "breve": true,
+     "ms": 1180,
+     "respuesta": "Good morning Jerónimo. How can I help you today?"
+    },
+    {
+     "pregunta": "Responde sí o no: ¿el agua hierve a 100 grados al nivel del mar?",
+     "ok": true,
+     "breve": true,
+     "ms": 1764,
+     "respuesta": "Sí, el agua hierve a 100 grados Celsius al nivel del mar bajo condiciones estándar."
+    },
+    {
+     "pregunta": "¿Cuál es el planeta más grande del sistema solar?",
+     "ok": true,
+     "breve": true,
+     "ms": 2495,
+     "respuesta": "El planeta más grande del sistema solar es Júpiter. Es un gigante gaseoso que pesa aproximadamente tres veces más que todos los demás planetas juntos."
+    },
+    {
+     "pregunta": "Saluda brevemente a Jerónimo.",
+     "ok": true,
+     "breve": true,
+     "ms": 1276,
+     "respuesta": "¡Hola Jerónimo! ¿En qué puedo ayudarte hoy?"
+    }
+   ],
+   "modelo_ms": {
+    "n": 8,
+    "p50": 1228,
+    "min": 518,
+    "max": 2495
+   },
+   "calidad": "7/8",
+   "calidad_pct": 88,
+   "brevedad": "8/8"
+  }
+ },
+ "servidor": {
+  "modelo": "jarvis-voz:2b",
+  "modo": "stream",
+  "pausa_s": 8.0,
+  "ms": {
+   "n": 4,
+   "p50": 1869,
+   "min": 1766,
+   "max": 2336
+  },
+  "primer_token_ms": {
+   "n": 4,
+   "p50": 1347,
+   "min": 1298,
+   "max": 1480
+  }
+ },
+ "voz_total_ms": {
+  "n": 3,
+  "p50": 4962,
+  "min": 4728,
+  "max": 7302
+ },
+ "voz_primera_voz_ms": {
+  "n": 3,
+  "p50": 4863,
+  "min": 4653,
+  "max": 7202
+ },
+ "voz_desglose": {
+  "stt_ms": "1016",
+  "llm_primer_token_ms": "133",
+  "llm_ms": "1343",
+  "tts_espera_tras_llm_ms": "2258",
+  "primera_voz_ms": "4653",
+  "total_ms": "4654",
+  "tts_ms_primera_frase": "2355",
+  "frases": "1"
+ }
+}

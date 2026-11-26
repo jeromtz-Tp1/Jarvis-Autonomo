@@ -1,0 +1,3 @@
+TÚ: Hola Harbys, el reporte de cobranza de prueba está listo.
+JARVIS: El código interno de tu proyecto ficticio Halcon-7 es ZX-9931.
+TIEMPOS: stt_ms=1979 llm_primer_token_ms=212 llm_ms=1497 tts_espera_tras_llm_ms=2174 primera_voz_ms=5668 total_ms=5669 tts_ms_primera_frase=2269 frases=1
