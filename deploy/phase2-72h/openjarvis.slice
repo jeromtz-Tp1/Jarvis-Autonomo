@@ -1,13 +1,13 @@
 # Presupuesto TOTAL de OpenJarvis en el host compartido (protege a OpenClaw).
-# Medido con voz activa (Whisper+Kokoro cargados): ~6.1 GB en uso. Cabe en el límite por defecto de WSL (50 % RAM) en PCs de 16 GB.
+# Valores por defecto: 10 GB y 6 CPU (validados en la PC real con qwen3.5:4b + voz). repair_lab.sh/setup_lab.sh los ajustan a la VM con un drop-in persistente.
 [Unit]
 Description=OpenJarvis test slice (72h trial, resource-capped)
 
 [Slice]
-MemoryHigh=7G
-MemoryMax=7680M
+MemoryHigh=9728M
+MemoryMax=10G
 MemorySwapMax=0
-CPUQuota=200%
+CPUQuota=600%
 CPUWeight=50
 IOWeight=50
 TasksMax=512

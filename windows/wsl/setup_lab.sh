@@ -23,7 +23,8 @@ H="$PREFIX/home"
 mkdir -p "$PREFIX"/{bin,logs,evidence,workspace,outside,mock,deploy}
 exec > >(tee -a "$LOG") 2>&1
 step() { echo; echo "[$(date -u +%T)] == $*"; }
-asu() { runuser -u "$OJUSER" -- bash -c "source $PREFIX/bin/ojenv.sh; $*"; }
+cd /tmp   # nunca heredar /root como directorio de trabajo (evita /root/uv.toml)
+source "$REPO_DIR/windows/wsl/ojlib.sh"   # asu(), recursos, descargas de mantenimiento, autodiagnóstico
 
 step "0. Comprobaciones"
 grep -qi microsoft /proc/sys/kernel/osrelease && echo "WSL detectado" || echo "No es WSL (instalación Linux genérica)"
@@ -44,7 +45,7 @@ id "$OJUSER" >/dev/null 2>&1 || useradd --system --create-home --home-dir "$H" -
 mkdir -p "$H"; chmod 750 "$H"
 cat > "$PREFIX/bin/ojenv.sh" <<EOF
 # Entorno aislado de OpenJarvis (sin secretos)
-export HOME=$H OPENJARVIS_HOME=$H/.openjarvis
+export HOME=$H OPENJARVIS_HOME=$H/.openjarvis UV_NO_CONFIG=1
 export PATH=$PREFIX/venv/bin:$H/.cargo/bin:$PREFIX/bin:$PREFIX/tools/bin:/usr/local/bin:/usr/bin:/bin
 export RUSTUP_HOME=$H/.rustup CARGO_HOME=$H/.cargo UV_CACHE_DIR=$H/.cache/uv HF_HOME=$H/.cache/huggingface
 export OLLAMA_MODELS=$H/.ollama/models OLLAMA_HOST=127.0.0.1:11434 OLLAMA_NUM_PARALLEL=1 OLLAMA_MAX_LOADED_MODELS=1 OLLAMA_CONTEXT_LENGTH=8192
@@ -85,7 +86,7 @@ if [ ! -x "$PREFIX/ollama/bin/ollama" ]; then
   else tar --zstd -xf /tmp/ollama.tar.zst -C "$PREFIX/ollama" --exclude='lib/ollama/cuda_*' --exclude='lib/ollama/rocm*' --exclude='lib/ollama/vulkan*'; fi
   rm -f /tmp/ollama.tar.zst; chown -R "$OJUSER:$OJUSER" "$PREFIX/ollama"
 fi
-asu "$PREFIX/ollama/bin/ollama --version 2>&1 | tail -1"
+asu "$PREFIX/ollama/bin/ollama --version 2>&1"
 
 step "7. Configuración endurecida, simulador MCP y archivos sintéticos"
 mkdir -p "$H/.openjarvis"
@@ -102,38 +103,25 @@ cp "$REPO_DIR/deploy/phase2-72h/"* "$PREFIX/deploy/"; sed -i "s#/opt/oj#$PREFIX#
 sed -i "s#^User=jarvis#User=$OJUSER#; s#^Group=jarvis#Group=$OJUSER#" "$PREFIX/deploy/"*.service
 chown -R "$OJUSER:$OJUSER" "$PREFIX"
 
-step "8. Servicios: systemd (si está activo en la distro) o control manual"
-if [ "$(ps -p 1 -o comm=)" = systemd ]; then
-  cp "$PREFIX/deploy/"*.slice "$PREFIX/deploy/"*.service "$PREFIX/deploy/"*.timer /etc/systemd/system/
-  systemctl daemon-reload; systemctl enable --now ojl-ollama.service ojl-server.service ojl-monitor.timer
-  echo "systemd: servicios habilitados con límites de openjarvis.slice"
-else
-  echo "systemd no es PID 1: se usará $PREFIX/bin/ojctl.sh (activar systemd en /etc/wsl.conf para los límites de la slice)"
-fi
-cat > "$PREFIX/bin/ojctl.sh" <<EOF
-#!/usr/bin/env bash
-# start|stop|status del laboratorio (usa systemd si existe; si no, procesos con pidfile)
-L=$PREFIX/logs; U=$OJUSER
-if [ "\$(ps -p 1 -o comm=)" = systemd ] && [ -f /etc/systemd/system/ojl-server.service ]; then
-  case "\${1:-status}" in start) systemctl start ojl-ollama ojl-server;; stop) systemctl stop openjarvis.slice;; esac
-else
-  RUN() { runuser -u \$U -- bash -c "source $PREFIX/bin/ojenv.sh; cd $PREFIX/workspace; \$1"; }
-  alive() { [ -f "\$L/\$1.pid" ] && kill -0 "\$(cat \$L/\$1.pid)" 2>/dev/null; }
-  case "\${1:-status}" in
-    start) alive ollama || RUN "nohup $PREFIX/ollama/bin/ollama serve >>\$L/ollama.log 2>&1 & echo \\\$! > \$L/ollama.pid"
-           for i in \$(seq 30); do curl -s -m 2 http://127.0.0.1:11434/api/version >/dev/null && break; sleep 1; done
-           alive server || RUN "nohup $PREFIX/venv/bin/jarvis serve --host 127.0.0.1 --port 8000 >>\$L/server.log 2>&1 & echo \\\$! > \$L/server.pid"
-           for i in \$(seq 120); do curl -s -m 2 http://127.0.0.1:8000/health >/dev/null && break; sleep 1; done;;
-    stop) for s in server ollama; do alive \$s && kill \$(cat \$L/\$s.pid); rm -f \$L/\$s.pid; done; sleep 2; pkill -u \$U -f llama-server || true;;
-  esac
-fi
-echo "ollama: \$(curl -s -m 3 http://127.0.0.1:11434/api/version || echo DOWN)"; echo "server: \$(curl -s -m 5 http://127.0.0.1:8000/health || echo DOWN)"
-EOF
-chmod 755 "$PREFIX/bin/ojctl.sh"; "$PREFIX/bin/ojctl.sh" start
+install -d "$PREFIX/fixtures"; install -m 644 "$REPO_DIR/windows/wsl/fixtures/stt_es.wav" "$PREFIX/fixtures/stt_es.wav"
+sed -e "s#@PREFIX@#$PREFIX#g" -e "s#@OJUSER@#$OJUSER#g" "$REPO_DIR/windows/wsl/ojctl.sh" > "$PREFIX/bin/ojctl.sh"; chmod 755 "$PREFIX/bin/ojctl.sh"
+chown -R "$OJUSER:$OJUSER" "$PREFIX"
 
-step "9. Modelos locales (descarga única; luego la operación es offline)"
-asu "$PREFIX/ollama/bin/ollama pull $MODEL 2>&1 | tail -1"
-asu "$PREFIX/venv/bin/python -c \"from openjarvis.speech.faster_whisper import FasterWhisperBackend as B; b=B(model_size='base',device='cpu',compute_type='int8'); assert b.health(), b.last_error(); print('whisper OK')\" 2>/dev/null"
-asu "$PREFIX/venv/bin/python -c \"from openjarvis.speech.kokoro_tts import KokoroTTSBackend as K; r=K().synthesize('Hola.', voice_id='ef_dora'); assert len(r.audio)>1000; print('kokoro OK')\" 2>/dev/null"
+step "8. Modelos locales (ANTES de activar servicios sin Internet; fallo = instalación fallida)"
+if oj_model_present "$MODEL"; then echo "modelo $MODEL ya presente"; else oj_pull_model_maintenance "$MODEL" || exit 5; fi
+asu "$PREFIX/venv/bin/python -c \"from openjarvis.speech.faster_whisper import FasterWhisperBackend as B; b=B(model_size='base',device='cpu',compute_type='int8'); assert b.health(), b.last_error(); print('whisper OK')\"" || { echo "FALLO: modelo de voz Whisper"; exit 5; }
+asu "$PREFIX/venv/bin/python -c \"from openjarvis.speech.kokoro_tts import KokoroTTSBackend as K; r=K().synthesize('Hola.', voice_id='ef_dora'); assert len(r.audio)>1000; print('kokoro OK')\"" || { echo "FALLO: modelo de voz Kokoro"; exit 5; }
+
+step "9. Servicios (systemd con límites persistentes y sin salida a Internet; o control manual)"
+if systemd_active; then
+  cp "$PREFIX/deploy/"*.slice "$PREFIX/deploy/"*.service "$PREFIX/deploy/"*.timer /etc/systemd/system/
+  echo "recursos: $(oj_write_slice_dropin)"
+else
+  echo "systemd no es PID 1: se usa $PREFIX/bin/ojctl.sh (Install-OpenJarvisLab activa systemd en /etc/wsl.conf)"
+fi
+oj_services_restart || exit 6
+
+step "10. Control final: STT, inferencia, TTS, voz, memoria y seguridad"
+oj_selftest "$PREFIX/evidence/install_selftest_$(date -u +%Y%m%dT%H%M%SZ)" || { echo "INSTALACIÓN CON FALLOS (ver [FALLO] arriba)"; exit 7; }
 
 step "LISTO. Siguiente: bash $REPO_DIR/windows/wsl/run_acceptance.sh --prefix $PREFIX --user $OJUSER"

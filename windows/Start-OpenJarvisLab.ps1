@@ -1,10 +1,16 @@
 ﻿<#
-.SYNOPSIS  Arranca el laboratorio y lo mantiene activo en segundo plano (para pruebas largas / agentes programados).
-.DESCRIPTION WSL apaga una distro poco después de cerrar su última sesión. Este script deja una sesión oculta
-  ("sleep infinity") que la mantiene viva hasta que se ejecute Stop-OpenJarvisLab.ps1 o se apague Windows.
+.SYNOPSIS  Arranca JARVIS y lo mantiene activo (tarea programada de usuario "OpenJarvisLab-KeepAlive").
+.DESCRIPTION Si la tarea no existe, ejecute .\Repair-OpenJarvisLab.ps1 (la crea). Código de salida 0 = JARVIS sano.
 #>
-$Distro = 'OpenJarvisLab'
-& wsl.exe -d $Distro -u root -- /opt/oj/bin/ojctl.sh start
-$alive = Get-CimInstance Win32_Process -Filter "Name='wsl.exe'" | Where-Object { $_.CommandLine -match "$Distro.*sleep infinity" }
-if (-not $alive) { Start-Process wsl.exe -ArgumentList "-d $Distro -u root -- sleep infinity" -WindowStyle Hidden }
-Write-Host "OpenJarvisLab activo. API local: http://127.0.0.1:8000/health  — Detener: .\Stop-OpenJarvisLab.ps1"
+$Distro = 'OpenJarvisLab'; $TaskName = 'OpenJarvisLab-KeepAlive'
+$t = Get-ScheduledTask -TaskName $TaskName -ErrorAction SilentlyContinue
+if ($t) { if ($t.State -ne 'Running') { Start-ScheduledTask -TaskName $TaskName } }
+else {
+  $vbs = Join-Path ([Environment]::GetFolderPath('Startup')) 'OpenJarvisLab-KeepAlive.vbs'
+  if (Test-Path $vbs) { Start-Process "$env:SystemRoot\System32\wscript.exe" -ArgumentList "//B //NoLogo `"$vbs`"" }
+  else { Write-Host 'Mantenimiento activo no configurado: ejecute .\Repair-OpenJarvisLab.ps1' -ForegroundColor Yellow } }
+$old = [Console]::OutputEncoding; [Console]::OutputEncoding = [Text.Encoding]::UTF8
+try { & wsl.exe -d $Distro -u root --exec /opt/oj/bin/ojctl.sh start; $rc = $LASTEXITCODE } finally { [Console]::OutputEncoding = $old }
+if ($rc -eq 0) { Write-Host 'JARVIS activo. Hablar: .\Talk-Jarvis.ps1   Detener: .\Stop-OpenJarvisLab.ps1' -ForegroundColor Green }
+else { Write-Host 'JARVIS no quedó sano: ejecute .\Repair-OpenJarvisLab.ps1' -ForegroundColor Red }
+exit $rc

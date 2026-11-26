@@ -1,0 +1,32 @@
+[19:04:10] 1/7 Diagnóstico de la distro
+  VM WSL: 16087 MB RAM, 4 CPU; PID1=process_api; disco libre 34G
+[19:04:10] 2/7 Aislamiento WSL (/etc/wsl.conf)
+  [OK]   wsl.conf correcto (systemd activo, sin unidades de Windows, sin interop)
+[19:04:10] 3/7 Componentes instalados (verificación local, sin descargas)
+  [OK]   /opt/ojlab/venv/bin/jarvis
+  [OK]   /opt/ojlab/ollama/bin/ollama
+  [OK]   /opt/ojlab/src/pyproject.toml
+  [OK]   /opt/ojlab/home/.openjarvis/config.toml
+  [OK]   OpenJarvis + extensión Rust importables
+  [AVISO] el modelo configurado modelo-inexistente:1b no está; se usa el instalado: qwen3.5:2b
+  [OK]   modelo STT Whisper base en caché
+  [OK]   modelo TTS Kokoro en caché
+[19:04:10] 4/7 Scripts y configuración corregidos
+  [OK]   ojenv.sh (UV_NO_CONFIG, PATH), ojctl.sh, ojvoice.sh y audio de referencia actualizados
+[19:04:11] 5/7 Servicios systemd y recursos persistentes
+  [AVISO] systemd no es PID 1 todavía (se activará tras reiniciar la distro)
+[19:04:11] 6/7 Reinicio de servicios
+  [OK]   servicios activos y /health = ok
+[19:04:19] 7/7 Pruebas independientes
+[19:04:19] Autodiagnóstico (evidencia en /opt/ojlab/evidence/repair_20261126T190419Z)
+  [OK]   Inferencia (qwen3.5:2b): 17+25 -> 42 en 16 s
+  [OK]   STT: Hola Harbys, el reporte de cobranza de prueba está listo.
+  [OK]   TTS: WAV de 88844 bytes
+  [OK]   Voz extremo a extremo: JARVIS: El código interno de tu proyecto ficticio Halcon-7 es ZX-9931.
+  [OK]   Memoria persistente en disco: 80 hechos guardados
+  [OK]   Seguridad: API y Ollama solo en 127.0.0.1
+  [OK]   Seguridad: allowlist estricta y modo block activos
+  [AVISO] systemd no es PID 1: límites de recursos y bloqueo de red de systemd no activos
+  [OK]   Aislamiento WSL: unidades de Windows no montadas
+SELFTEST_FAILS=0
+[19:05:08] Log completo: /opt/ojlab/logs/repair_20261126T190410Z.log

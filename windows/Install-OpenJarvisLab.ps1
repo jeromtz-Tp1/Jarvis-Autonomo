@@ -7,7 +7,9 @@
   3. La importa como distro nueva "OpenJarvisLab" (no toca otras distros, Docker ni Ollama de Windows).
   4. Aísla la distro: sin montar C:\ ni otras unidades, sin ejecutar programas de Windows, con systemd para límites de RAM/CPU.
   5. Copia los entregables LOCALES (esta carpeta, descargada en ZIP) a la distro, sin red ni credenciales,
-     verifica su integridad (BUNDLE_MANIFEST.sha256) y ejecuta setup_lab.sh y run_acceptance.sh.
+     verifica su integridad (BUNDLE_MANIFEST.sha256) y ejecuta setup_lab.sh (que falla si cualquier descarga o prueba falla).
+  6. Ejecuta Repair-OpenJarvisLab.ps1: recursos persistentes, WSL siempre activo y pruebas independientes.
+     Con -FullAcceptance ejecuta además la batería T01-T13.
   6. Copia RESULTS.md a la carpeta de este script.
   No usa credenciales, no abre puertos externos (los servicios escuchan solo en 127.0.0.1), costo USD 0.
   No requiere administrador SI WSL ya está instalado. Si falta WSL, indica el único comando de administrador necesario.
@@ -19,7 +21,7 @@
   [string]$InstallDir = (Join-Path $env:LOCALAPPDATA 'OpenJarvisLab'),
   [int]$Minutes = 30,
   [string]$Model = '',
-  [switch]$SkipTests)
+  [switch]$FullAcceptance)
 $ErrorActionPreference = 'Stop'
 $Distro = 'OpenJarvisLab'
 $RootfsUrl = 'https://cloud-images.ubuntu.com/wsl/releases/24.04/current/ubuntu-noble-wsl-amd64-wsl.rootfs.tar.gz'
@@ -93,10 +95,13 @@ if ($LASTEXITCODE) {
 }
 Remove-Item $tarFile -ErrorAction SilentlyContinue
 # 5b. Normaliza finales de línea (ZIP/git en Windows pueden convertir a CRLF) y verifica integridad
-InDistro "cd /root/oj-bundle && find . -type f -exec sed -i 's/\r$//' {} + && sha256sum --quiet -c windows/BUNDLE_MANIFEST.sha256 && echo 'entregables verificados (SHA256)'"
+InDistro "cd /root/oj-bundle && find . -type f ! -name '*.wav' -exec sed -i 's/\r$//' {} + && sha256sum --quiet -c windows/BUNDLE_MANIFEST.sha256 && echo 'entregables verificados (SHA256)'"
 InDistro "bash /root/oj-bundle/windows/wsl/setup_lab.sh --prefix /opt/oj --user jarvis --model '$Model' --gpu auto"
-if (-not $SkipTests) {
-  Log "Paso 6/6: pruebas de aceptación T01-T12 (incluye $Minutes min de estabilidad)"
+Log 'Paso 6/6: recursos persistentes, WSL activo y pruebas independientes (Repair-OpenJarvisLab.ps1)'
+& (Join-Path $PSScriptRoot 'Repair-OpenJarvisLab.ps1') -InstallDir $InstallDir
+if ($LASTEXITCODE -ne 0) { throw 'La instalación terminó con fallos: revise el informe REPAIR_REPORT_*.md' }
+if ($FullAcceptance) {
+  Log "Batería completa T01-T13 (incluye $Minutes min de estabilidad)"
   InDistro "bash /root/oj-bundle/windows/wsl/run_acceptance.sh --prefix /opt/oj --user jarvis --minutes $Minutes --model '$Model'"
   $res = & wsl.exe -d $Distro -u root --exec bash -c 'cat $(ls -dt /opt/oj/evidence/acceptance_*/ | head -1)RESULTS.md'
   $dest = Join-Path $PSScriptRoot "RESULTS_$(Get-Date -Format yyyyMMdd_HHmm).md"; $res | Set-Content $dest -Encoding UTF8

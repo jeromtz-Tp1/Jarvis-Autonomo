@@ -75,3 +75,27 @@ Hallazgos:
 - **Kokoro pronuncia "ZX-9931" de forma poco clara** al leer códigos alfanuméricos.
 - **Memoria con voz activa: ~6.1 GB** (servidor 1.8 GB con Whisper+Kokoro cargados). Se subió la slice a `MemoryHigh=7G` / `MemoryMax=7.5G`. En una PC de 16 GB, WSL dispone de 8 GB por defecto: suficiente, pero conviene cerrar aplicaciones pesadas.
 - `Talk-Jarvis.ps1` (grabación con `winmm` y reproducción con `SoundPlayer`) **no se ejecutó** en Windows. La ruta Linux que usa (`ojvoice.sh`) sí está validada por T13.
+
+## 2026-11-26 — Validación de la reparación consolidada (Repair-OpenJarvisLab)
+
+Evidencia: `evidence/repair_validation/`. Parte Linux ejecutada en Ubuntu 24.04 (base de la distro WSL); los `.ps1` revisados línea a línea y con codificación verificada (BOM UTF-8, CRLF), **no ejecutados** en Windows.
+
+| Defecto reproducido | Antes | Después |
+|---|---|---|
+| `/root/uv.toml` (cwd `/root`) | `error: failed to open file /root/uv.toml: Permission denied` | `asu` nuevo: `uv pip list` correcto |
+| Descarga fallida con `\| tail -1` | **código 0** (éxito falso) | `[FALLO] descarga… (código 1)`; Ollama temporal apagado |
+| Descarga real por la vía de mantenimiento | — | `qwen3:0.6b` descargado y verificado por manifiesto (luego borrado) |
+| Instalador con descarga fallida | informaba éxito | **sale con código 5** |
+| Errores HTTP en `ojvoice.sh` (servidor falso) | `JSONDecodeError` | servidor caído → 10; STT 500 → 11 con cuerpo; chat 502 HTML → 12 con cuerpo; TTS 501 → 13; sin audio → 2 |
+| Instalación degradada (servicios caídos, scripts antiguos, `mode=warn`, sin `wsl.conf`) | — | Pasada 1: corrige `wsl.conf` y `mode=block` y espera el reinicio; pasada 2: servicios activos y **autodiagnóstico 0 fallos** |
+| Configuración con modelo inexistente | — | Detectado; vuelve al modelo instalado sin descargar; **0 fallos** |
+
+Autodiagnóstico final:
+- inferencia 42 en 16 s;
+- STT "…el reporte de cobranza de prueba está listo";
+- TTS WAV de 88 KB;
+- voz de extremo a extremo con memoria (ZX-9931);
+- 80 hechos de memoria en disco;
+- solo loopback, allowlist estricta y modo `block`.
+
+No verificable en este contenedor (sin systemd como PID 1): el arranque de las unidades con la slice, `IPAddressDeny` en ejecución y la tarea programada de Windows. La sintaxis de las unidades y del drop-in de recursos sí se validó con `systemd-analyze verify`. Todo eso lo comprueba `Repair-OpenJarvisLab.ps1` en la PC, y aparecerá como `[FALLO]` si no funciona.
