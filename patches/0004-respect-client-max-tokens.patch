@@ -1,0 +1,19 @@
+diff --git a/src/openjarvis/server/routes.py b/src/openjarvis/server/routes.py
+index fa740c94..ab10da5e 100644
+--- a/src/openjarvis/server/routes.py
++++ b/src/openjarvis/server/routes.py
+@@ -267,7 +267,13 @@ async def chat_completions(request_body: ChatCompletionRequest, request: Request
+             )
+             # Bump max_tokens when complexity suggests more than what
+             # the client requested — never reduce below the request value.
+-            if suggested > request_body.max_tokens:
++            # JARVIS performance (patch 0004): with OJ_RESPECT_CLIENT_MAX_TOKENS=1 the client's
++            # max_tokens is a hard cap (voice turns ask for short answers).
++            import os as _os
++            if (
++                suggested > request_body.max_tokens
++                and _os.environ.get("OJ_RESPECT_CLIENT_MAX_TOKENS") != "1"
++            ):
+                 request_body.max_tokens = suggested
+         except Exception:
+             logging.getLogger("openjarvis.server").debug(

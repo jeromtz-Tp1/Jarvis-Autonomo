@@ -151,8 +151,11 @@ for m in models:
 if a.server_model:
     jpost(a.ollama + "/api/generate", {"model": a.server_model, "prompt": "", "keep_alive": "30m"})  # precarga (descartada)
     lat, ttft = [], []
+    marker = os.environ.get("OJ_MEMORY_DEFER_FILE")  # igual que ojvoice: difiere la extracción durante el turno
     for q, _ in QUALITY[: max(3, a.runs + 1)]:
         time.sleep(a.gap_s)
+        if marker:
+            open(marker, "w").close()
         body = {"model": a.server_model, "messages": [{"role": "system", "content": SYSTEM}, {"role": "user", "content": q}],
                 "max_tokens": 160, "temperature": 0.3, "stream": a.server_mode == "stream"}
         t = now(); first = None
@@ -174,6 +177,8 @@ if a.server_model:
             if c != 200:
                 res["errores"].append(f"servidor HTTP {c}: {d[:160]!r}")
         lat.append((now() - t) * 1000); ttft.append(first)
+        if marker and os.path.exists(marker):
+            os.remove(marker)
     res["servidor"] = {"modelo": a.server_model, "modo": a.server_mode, "pausa_s": a.gap_s, "ms": stats(lat), "primer_token_ms": stats(ttft)}
 
 # ---- Voz extremo a extremo (comando real de la voz)

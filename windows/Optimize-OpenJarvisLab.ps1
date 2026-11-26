@@ -73,6 +73,9 @@ $threadSet = (@(4, 6, $vmCpu) | Where-Object { $_ -le $vmCpu } | Sort-Object -Un
 Write-Host "  Modelos locales: $models | CPU de la VM: $vmCpu | hilos a probar: $threadSet"
 [void](X "bash $OPT status")
 
+# Las pruebas no deben dejar datos en la memoria real de Jerónimo: instantánea ahora, restauración al final (siempre)
+[void](X "bash $OPT memsnap save")
+try {
 # ---------------- 2. Banco ANTES ----------------
 Log '2/7 Banco ANTES (configuración actual; varios minutos)'
 $current0 = ((X "sed -n 's/^default_model = .\(.*\).$/\1/p' /opt/oj/home/.openjarvis/config.toml | head -1") | Select-Object -Last 1).Trim()
@@ -180,6 +183,7 @@ if ($selfFails -gt 0 -or $worse) {
   $md += ''; $md += "**DECISIÓN: REVERTIDO automáticamente** (" + $(if ($worse) { 'la latencia empeoró' } else { 'fallaron pruebas' }) + '). El sistema quedó como antes.'
   [void](X "bash $OPT revert")
 } else { $md += ''; $md += '**DECISIÓN: OPTIMIZACIÓN APLICADA.** Revertir en cualquier momento: `.\Optimize-OpenJarvisLab.ps1 -Revert`' }
+} finally { Log 'Restaurando la memoria del usuario (sin datos de prueba)'; [void](X "bash $OPT memsnap restore") }
 $rep = Join-Path $PSScriptRoot "OPTIMIZE_REPORT_$stamp.md"; $md | Set-Content $rep -Encoding UTF8
 Write-Host "`n$($md -join "`n")`n`nInforme: $rep  · Datos: $OutDir" -ForegroundColor Green
 if ($selfFails -gt 0 -or $worse) { exit 1 } else { exit 0 }

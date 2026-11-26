@@ -18,7 +18,8 @@ set -uo pipefail
 PREFIX=/opt/oj; OJUSER=jarvis; CMD=status
 MODEL=""; THREADS=""; CTX=4096
 while [ $# -gt 0 ]; do case "$1" in --prefix) PREFIX=$2; shift 2;; --user) OJUSER=$2; shift 2;; --model) MODEL=$2; shift 2;;
-  --threads) THREADS=$2; shift 2;; --ctx) CTX=$2; shift 2;; apply|revert|status) CMD=$1; shift;; *) echo "argumento desconocido $1"; exit 2;; esac; done
+  --threads) THREADS=$2; shift 2;; --ctx) CTX=$2; shift 2;; apply|revert|status) CMD=$1; shift;;
+  memsnap) CMD=memsnap; SUB=${2:-}; shift 2;; *) echo "argumento desconocido $1"; exit 2;; esac; done
 cd /tmp
 B="$(cd "$(dirname "$0")/../.." && pwd)"; H="$PREFIX/home"; source "$B/windows/wsl/ojlib.sh"
 ST="$PREFIX/optimize/state"; CFG="$H/.openjarvis/config.toml"; ENVF="$PREFIX/deploy/ojl.env"
@@ -57,24 +58,21 @@ apply() {
   backup "$CFG" "$ENVF" "$PREFIX/bin/ojenv.sh" "$PREFIX/bin/ojvoice.sh" "$PREFIX/bin/ojctl.sh"
   [ -f "$ST/default_model" ] || oj_config_model > "$ST/default_model"
 
-  # 4. Parche STT 0002 (idempotente, reversible)
-  install -m 644 "$B/patches/0002-stt-tunable-beam-vad.patch" "$PREFIX/0002.patch"; chown "$OJUSER" "$PREFIX/0002.patch"
-  if asu "cd $PREFIX/src && git apply --check $PREFIX/0002.patch" 2>/dev/null; then asu "cd $PREFIX/src && git apply $PREFIX/0002.patch" && touch "$ST/patch0002"; oj_ok "parche STT 0002 aplicado"
-  elif asu "cd $PREFIX/src && git apply -R --check $PREFIX/0002.patch" 2>/dev/null; then oj_ok "parche STT 0002 ya presente"
-  else oj_fail "parche STT 0002 no aplicable"; fi
-
-  # Memoria rápida (parche 0003): hechos por relevancia con presupuesto 512 tokens y extracción diferida durante la voz
-  install -m 644 "$B/patches/0003-memory-fact-ranking-and-deferred-extraction.patch" "$PREFIX/0003.patch"; chown "$OJUSER" "$PREFIX/0003.patch"
-  if asu "cd $PREFIX/src && git apply --check $PREFIX/0003.patch" 2>/dev/null; then asu "cd $PREFIX/src && git apply $PREFIX/0003.patch" && touch "$ST/patch0003"; oj_ok "parche de memoria 0003 aplicado"
-  elif asu "cd $PREFIX/src && git apply -R --check $PREFIX/0003.patch" 2>/dev/null; then oj_ok "parche de memoria 0003 ya presente"
-  else oj_fail "parche de memoria 0003 no aplicable"; fi
+  # Parches de rendimiento (idempotentes, reversibles): 0002 STT ajustable · 0003 memoria por relevancia y extracción
+  # diferida · 0004 max_tokens del cliente como tope
+  for P in 0002-stt-tunable-beam-vad 0003-memory-fact-ranking-and-deferred-extraction 0004-respect-client-max-tokens; do
+    n=${P%%-*}; install -m 644 "$B/patches/$P.patch" "$PREFIX/$n.patch"; chown "$OJUSER" "$PREFIX/$n.patch"
+    if asu "cd $PREFIX/src && git apply --check $PREFIX/$n.patch" 2>/dev/null; then asu "cd $PREFIX/src && git apply $PREFIX/$n.patch" && echo "$n" >> "$ST/patches"; oj_ok "parche $n aplicado"
+    elif asu "cd $PREFIX/src && git apply -R --check $PREFIX/$n.patch" 2>/dev/null; then oj_ok "parche $n ya presente"
+    else oj_fail "parche $n no aplicable"; fi
+  done
   toml_set memory context_max_tokens 512
 
   # 2/4. Variables de entorno (servicio y shell) en bloque marcado
   for f in "$ENVF" "$PREFIX/bin/ojenv.sh"; do
     [ -f "$f" ] || continue; strip_block "$f"
     pre=""; [ "$f" = "$PREFIX/bin/ojenv.sh" ] && pre="export "
-    { echo "$BEGIN"; for kv in "JARVIS_NUM_CTX=$CTX" "OLLAMA_CONTEXT_LENGTH=$CTX" "OLLAMA_KEEP_ALIVE=-1" "OJ_STT_BEAM_SIZE=1" "OJ_STT_VAD=1" "OJ_STT_NO_PREV_TEXT=1" "OJ_MEMORY_FACT_RANK=1" "OJ_MEMORY_DEFER_FILE=$H/.openjarvis/.voice_busy" "OJ_MEMORY_DEFER_MAX_S=30"; do echo "$pre$kv"; done; echo "$END"; } >> "$f"
+    { echo "$BEGIN"; for kv in "JARVIS_NUM_CTX=$CTX" "OLLAMA_CONTEXT_LENGTH=$CTX" "OLLAMA_KEEP_ALIVE=-1" "OJ_STT_BEAM_SIZE=1" "OJ_STT_VAD=1" "OJ_STT_NO_PREV_TEXT=1" "OJ_MEMORY_FACT_RANK=1" "OJ_MEMORY_DEFER_FILE=$H/.openjarvis/.voice_busy" "OJ_MEMORY_DEFER_MAX_S=30" "OJ_RESPECT_CLIENT_MAX_TOKENS=1"; do echo "$pre$kv"; done; echo "$END"; } >> "$f"
   done
   oj_ok "entorno: contexto $CTX, modelo residente, STT beam=1 + VAD, memoria por relevancia (512 tokens) y extracción diferida"
 
@@ -143,8 +141,8 @@ revert() {
   oj_log "Revirtiendo optimización"
   restore "$CFG" "$ENVF" "$PREFIX/bin/ojenv.sh" "$PREFIX/bin/ojvoice.sh" "$PREFIX/bin/ojctl.sh"
   strip_block "$ENVF"; strip_block "$PREFIX/bin/ojenv.sh"
-  if [ -f "$ST/patch0003" ]; then asu "cd $PREFIX/src && git apply -R $PREFIX/0003.patch" && oj_ok "parche 0003 retirado"; fi
-  if [ -f "$ST/patch0002" ]; then asu "cd $PREFIX/src && git apply -R $PREFIX/0002.patch" && oj_ok "parche 0002 retirado"; fi
+  for n in 0002 0003; do [ -f "$ST/patch$n" ] && echo "$n" >> "$ST/patches"; done   # formato de estado anterior
+  [ -f "$ST/patches" ] && sort -ru "$ST/patches" | while read -r n; do asu "cd $PREFIX/src && git apply -R $PREFIX/$n.patch" && oj_ok "parche $n retirado"; done
   rm -f "$PREFIX/bin/ojvoice.py" "$PREFIX/bin/ojwarmup.sh"
   if systemd_active; then systemctl disable --now ojl-warmup.service >/dev/null 2>&1; rm -f /etc/systemd/system/ojl-warmup.service /etc/systemd/system/openjarvis.slice.d/20-performance.conf; systemctl daemon-reload; fi
   oj_services_restart >/dev/null
@@ -158,5 +156,25 @@ status() {
     grep -E "JARVIS_NUM_CTX|KEEP_ALIVE|OJ_STT" "$ENVF" 2>/dev/null | sed 's/^/  /'; grep -A2 '^\[server\]' "$CFG" | sed 's/^/  /'
   else echo "SIN OPTIMIZAR (modelo: $(oj_config_model))"; fi
 }
-case "$CMD" in apply) apply;; revert) revert;; status) status;; *) echo "uso: $0 apply|revert|status"; exit 2;; esac
+# memsnap save|restore — las pruebas NO deben dejar datos en la memoria real del usuario.
+memsnap() {
+  local S="$PREFIX/optimize/memsnap" f
+  if [ "${SUB:-}" = save ]; then
+    rm -rf "$S"; mkdir -p "$S"
+    for f in memory_facts.jsonl voice_history.jsonl; do
+      if [ -e "$H/.openjarvis/$f" ]; then cp -a "$H/.openjarvis/$f" "$S/$f"; else touch "$S/$f.absent"; fi; done
+    oj_ok "memoria del usuario guardada antes de las pruebas ($(cat "$S/memory_facts.jsonl" 2>/dev/null | grep -c . || true) hechos)"
+  else
+    [ -d "$S" ] || { echo "sin instantánea de memoria"; return 0; }
+    # esperar a que la extracción en segundo plano termine (archivo sin cambios 10 s, máx. 180 s)
+    local last=0 stable=0; for _ in $(seq 180); do
+      m=$(stat -c %Y "$H/.openjarvis/memory_facts.jsonl" 2>/dev/null || echo 0); [ "$m" = "$last" ] && stable=$((stable+1)) || stable=0; last=$m
+      [ $stable -ge 10 ] && break; sleep 1; done
+    for f in memory_facts.jsonl voice_history.jsonl; do
+      if [ -e "$S/$f.absent" ]; then rm -f "$H/.openjarvis/$f"; elif [ -e "$S/$f" ]; then cp -a "$S/$f" "$H/.openjarvis/$f"; fi; done
+    chown "$OJUSER:$OJUSER" "$H/.openjarvis/"*.jsonl 2>/dev/null; rm -rf "$S"
+    oj_ok "memoria del usuario restaurada: las pruebas no dejaron datos ($(cat "$H/.openjarvis/memory_facts.jsonl" 2>/dev/null | grep -c . || true) hechos)"
+  fi
+}
+case "$CMD" in apply) apply;; revert) revert;; status) status;; memsnap) memsnap;; *) echo "uso: $0 apply|revert|status|memsnap save|restore"; exit 2;; esac
 exit $(( ${OJ_FAILS:-0} > 0 ))
