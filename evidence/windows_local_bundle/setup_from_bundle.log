@@ -1,0 +1,41 @@
+
+[01:01:27] == 0. Comprobaciones
+No es WSL (instalación Linux genérica)
+SO: Ubuntu 24.04.5 LTS
+CPU: 4 núcleos; AVX2: si
+RAM total GB: 15  disponible GB: 10
+Disco libre en PREFIX:   34G
+Aceleración seleccionada: cpu
+
+[01:01:27] == 1. Paquetes base (solo dentro de esta distro)
+
+[01:01:27] == 2. Usuario sin privilegios 'ojlab' y entorno
+
+[01:01:27] == 3. Herramientas: uv (PyPI) y Rust (rustup-init oficial, verificado sha256)
+uv 0.13.10 (x86_64-unknown-linux-gnu)
+cargo 1.100.0 (3acc79c0c 2026-11-05)
+
+[01:01:27] == 4. OpenJarvis en revisión fija ae36ac97e9adcd55e8cf6e98b6274948ab28134c + parche de seguridad R1/R2
+ae36ac97e9adcd55e8cf6e98b6274948ab28134c 2026-11-24 06:11:20 +0000
+parche ya aplicado
+
+[01:01:28] == 5. Entorno Python 3.12 + extras (server, speech, voice) + extensión Rust
+rust OK
+
+[01:01:30] == 6. Ollama v0.40.18 sin root ni systemd del sistema (backend: cpu)
+ollama version is 0.40.18
+
+[01:01:30] == 7. Configuración endurecida, simulador MCP y archivos sintéticos
+
+[01:01:30] == 8. Servicios: systemd (si está activo en la distro) o control manual
+systemd no es PID 1: se usará /opt/ojlab/bin/ojctl.sh (activar systemd en /etc/wsl.conf para los límites de la slice)
+ollama: {"version":"0.40.18"}
+server: {"status":"ok"}
+
+[01:01:30] == 9. Modelos locales (descarga única; luego la operación es offline)
+success [K[?25h[?2026l
+whisper OK
+kokoro OK
+
+[01:01:44] == LISTO. Siguiente: bash /root/oj-bundle/windows/wsl/run_acceptance.sh --prefix /opt/ojlab --user ojlab
+SETUP_RC=0

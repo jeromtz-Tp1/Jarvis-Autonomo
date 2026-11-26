@@ -15,7 +15,7 @@
 ## 2. Lo único que tiene que hacer Jerónimo (elige A o B)
 
 **A. Recomendada: lo ejecuta él (≈ 2 minutos de su tiempo y luego espera)**
-1. Descargar la carpeta `windows/` de este repositorio (rama `claude/openjarvis-setup-validation-n0vk5x`) a la PC; por ejemplo con *Code → Download ZIP* en GitHub y descomprimir.
+1. En GitHub (con su sesión iniciada en el navegador), abrir la rama `claude/openjarvis-setup-validation-n0vk5x`, pulsar *Code → Download ZIP* y descomprimir el ZIP **completo** en la PC. El instalador usa esta copia local: **no** clona el repositorio desde WSL ni necesita credenciales; copia los archivos a la distro y verifica cada uno contra `windows/BUNDLE_MANIFEST.sha256`.
 2. Abrir **PowerShell** (normal, sin administrador) en esa carpeta y ejecutar:
    ```powershell
    powershell -ExecutionPolicy Bypass -File .\Install-OpenJarvisLab.ps1
@@ -47,7 +47,7 @@ Derivados de lo **medido** en las fases 1 y 2 (modelo `qwen3.5:2b`: 4.4–4.9 GB
 - Dentro de la distro:
   - **sin acceso a `C:\`** ni a otras unidades (`automount` desactivado);
   - **no puede lanzar programas de Windows** (`interop` desactivado);
-  - systemd activo, con límites de **7 GB de RAM y 2 núcleos** (slice de la Fase 2).
+  - systemd activo, con límites de **7.5 GB de RAM y 2 núcleos** (slice de la Fase 2).
 - OpenJarvis en la misma revisión fija (`ae36ac97`), con el parche de seguridad R1/R2, el usuario sin privilegios `jarvis` y la configuración endurecida:
   - herramientas mínimas: sin shell, sin escritura de archivos y sin web;
   - `allowed_dirs` limitado y modo `block`;
@@ -60,6 +60,8 @@ Derivados de lo **medido** en las fases 1 y 2 (modelo `qwen3.5:2b`: 4.4–4.9 GB
 
 | Acción | Comando (PowerShell, sin administrador) |
 |---|---|
+| **Hablar con JARVIS por voz** (micrófono/altavoces) | `.\Talk-Jarvis.ps1` (Enter = hablar, Enter = terminar, `q` = salir) |
+| Pregunta escrita, respuesta hablada | `.\Talk-Jarvis.ps1 -Text "Hola Jarvis"` |
 | Arrancar y mantener activo (agentes programados) | `.\Start-OpenJarvisLab.ps1` |
 | Parada inmediata (kill-switch) | `.\Stop-OpenJarvisLab.ps1` |
 | Ver estado | `wsl -d OpenJarvisLab -u root -- /opt/oj/bin/ojctl.sh status` |
@@ -68,6 +70,8 @@ Derivados de lo **medido** en las fases 1 y 2 (modelo `qwen3.5:2b`: 4.4–4.9 GB
 Notas para pruebas largas:
 - WSL apaga la distro al cerrar la última sesión; `Start-OpenJarvisLab.ps1` la mantiene viva.
 - En una laptop: mantenerla conectada a la corriente y desactivar la suspensión durante la prueba. Una PC personal que se apaga o suspende **no** ofrece disponibilidad 24/7.
+
+La voz no expone puertos: el audio viaja de Windows a la distro por stdin/stdout de `wsl.exe`. Dentro de ella, `ojvoice.sh` transcribe con Whisper, consulta a JARVIS (con memoria persistente e historial corto) y sintetiza la respuesta con Kokoro.
 
 ## 6. Validación realizada del instalador
 
@@ -83,3 +87,7 @@ Ver `TEST_RESULTS_WINDOWS_PREP.md`.
 
   La primera ejecución real en la PC es la prueba definitiva; si algo falla, el script se detiene con un mensaje claro y no deja cambios fuera de la distro.
 - El rendimiento en la PC dependerá de su CPU/GPU: en 4 vCPU de servidor la latencia fue de 6.5–8 s por respuesta.
+
+## 8. Aviso de visibilidad del repositorio
+
+El 2026-11-26 la API de GitHub reporta `jeromtz-Tp1/Jarvis-Autonomo` como **público**. No contiene secretos, pero sí hallazgos de seguridad y la arquitectura prevista de TP1. Si debe ser privado, Jerónimo puede cambiarlo en *Settings → General → Danger Zone → Change visibility*; el instalador ya no depende de la visibilidad.

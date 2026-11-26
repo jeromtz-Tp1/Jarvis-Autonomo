@@ -1,0 +1,43 @@
+{
+  "content": "PARIS",
+  "usage": {
+    "prompt_tokens": 1120,
+    "prompt_tokens_evaluated": 1120,
+    "completion_tokens": 3,
+    "total_tokens": 1123
+  },
+  "model": "qwen3.5:2b",
+  "finish_reason": "stop",
+  "ttft": 5.906622,
+  "engine_timing": {
+    "total_duration": 6038463864,
+    "load_duration": 1672974,
+    "prompt_eval_duration": 5906622000,
+    "eval_duration": 109003000
+  },
+  "_telemetry": {
+    "latency": 6.047911240000076,
+    "ttft": 5.906622,
+    "throughput_tok_per_sec": 0.49603902586373977,
+    "energy_per_output_token_joules": 0.0,
+    "throughput_per_watt": 0.0,
+    "energy_joules": 0.0,
+    "power_watts": 0.0,
+    "gpu_utilization_pct": 0.0,
+    "gpu_memory_used_gb": 0.0,
+    "gpu_temperature_c": 0.0,
+    "prefill_latency_seconds": 5.906622,
+    "decode_latency_seconds": 0.14128924000007625,
+    "prefill_energy_joules": 0.0,
+    "decode_energy_joules": 0.0,
+    "mean_itl_ms": 47.096413333358754,
+    "energy_method": "",
+    "energy_vendor": "",
+    "cpu_energy_joules": 0.0,
+    "gpu_energy_joules": 0.0,
+    "dram_energy_joules": 0.0,
+    "ane_energy_joules": 0.0,
+    "soc_energy_joules": 0.0,
+    "energy_basis": ""
+  }
+}

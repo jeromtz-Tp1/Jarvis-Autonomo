@@ -45,3 +45,33 @@ Ejecución definitiva: 2026-11-25 19:46:31 → 20:23:08 UTC. Evidencia: `evidenc
 ### Observación de memoria (para la prueba larga)
 
 RAM del runner del modelo: 4177 → 4645 MB en 30 min (+470 MB); el servidor se mantuvo plano (943 → 944 MB). Lo más probable es que sea la caché de contexto de llama.cpp, acotada por `OLLAMA_CONTEXT_LENGTH=8192`. No se pudo confirmar que se estabilice en 30 min. En la PC queda acotado por la slice (`MemoryMax=7G`), y la prueba de 72 h debe confirmar la meseta.
+
+## 2026-11-26 — Instalación desde copia local (sin clonar nuestro repositorio) + voz conversacional
+
+Corrección pedida por Jarvis: `Install-OpenJarvisLab.ps1` ya no ejecuta `git clone` de `Jarvis-Autonomo` desde WSL.
+- Empaqueta los entregables locales (ZIP descomprimido) con `tar.exe` de Windows y los pasa a la distro por stdin (redirección binaria de `cmd`). Si eso falla, copia por `\\wsl.localhost`.
+- Normaliza los finales de línea y verifica los 15 archivos contra `windows/BUNDLE_MANIFEST.sha256`.
+- Sin credenciales en WSL. La única descarga de GitHub es OpenJarvis oficial (público) y sus dependencias públicas.
+
+Simulación del peor caso de Windows (todos los archivos convertidos a CRLF, transferidos como `.tar` por stdin):
+
+| Comprobación | Resultado |
+|---|---|
+| Verificación SHA256 antes de normalizar | Falla (14 de 14 sumas no coinciden): el control detecta el CRLF |
+| Tras normalizar (comando exacto del `.ps1`) | **15/15 OK** — "entregables verificados (SHA256)" |
+| Archivo manipulado | Detectado ("1 computed checksum did NOT match") |
+| Dependencia de nuestro repo en los scripts | Ninguna (`grep` sin coincidencias) |
+
+Batería desde la copia local (`/root/oj-bundle`), 2026-11-26 01:01–01:12 UTC. Evidencia: `evidence/windows_local_bundle/`.
+
+| ID | Resultado | Evidencia |
+|---|---|---|
+| T01–T11 | **PASS** (11/11) | Igual que la ejecución del 25-nov; T08: 2 ejecuciones autónomas con resultado 42 |
+| T12 | **PASS** | 3 min, 3/3 (los 30 min ya se validaron el 25-nov: 28/28) |
+| **T13 (nuevo)** | **PASS** | Conversación por voz de extremo a extremo con la misma ruta que `Talk-Jarvis.ps1`. Pregunta hablada → transcripción "¿cuál es el código interno de mi proyecto ficticio al con 7?" → JARVIS: "El código interno de tu proyecto ficticio Halcon-7 es ZX-9931." (memoria persistente) → respuesta sintetizada y retranscrita: "…Al-Consiete Seta X 9.931" |
+
+Hallazgos:
+- **Whisper `base` deforma los nombres propios** ("Jarvis"→"Harbys", "Halcón siete"→"al con 7"), aunque la memoria compensó en este caso. Opción si molesta en uso real: modelo `small` (más preciso, más RAM y más lento).
+- **Kokoro pronuncia "ZX-9931" de forma poco clara** al leer códigos alfanuméricos.
+- **Memoria con voz activa: ~6.1 GB** (servidor 1.8 GB con Whisper+Kokoro cargados). Se subió la slice a `MemoryHigh=7G` / `MemoryMax=7.5G`. En una PC de 16 GB, WSL dispone de 8 GB por defecto: suficiente, pero conviene cerrar aplicaciones pesadas.
+- `Talk-Jarvis.ps1` (grabación con `winmm` y reproducción con `SoundPlayer`) **no se ejecutó** en Windows. La ruta Linux que usa (`ojvoice.sh`) sí está validada por T13.

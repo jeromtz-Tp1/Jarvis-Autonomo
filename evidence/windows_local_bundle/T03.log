@@ -1,0 +1,84 @@
+                               Memory Facts (70)                                
+┏━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━┳━━━━━━━┓
+┃ #    ┃ Fact                                                 ┃ Source ┃ Trust ┃
+┡━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━╇━━━━━━━┩
+│ 1    │ El usuario tiene un proyecto ficticio llamado        │ auto   │ auto  │
+│      │ Halcon-7 con código interno ZX-9931.                 │        │       │
+│ 2    │ El usuario está interesado en tareas relacionadas    │ auto   │ auto  │
+│      │ con su entorno local.                                │        │       │
+│ 3    │ El código interno del proyecto Halcon-7 es ZX-9931.  │ auto   │ auto  │
+│ 4    │ El usuario tiene un proyecto ficticio llamado        │ auto   │ auto  │
+│      │ Halcon-7.                                            │        │       │
+│ 5    │ El usuario pregunta por el código interno de un      │ auto   │ auto  │
+│      │ proyecto específico.                                 │        │       │
+│ 6    │ User asked for the sum of 14 and 46.                 │ auto   │ auto  │
+│ 7    │ User requested a single numerical answer only.       │ auto   │ auto  │
+│ 8    │ User asked for the sum of 27 and 34.                 │ auto   │ auto  │
+│ 9    │ User asked for the sum of 14 and 47.                 │ auto   │ auto  │
+│ 10   │ User asked for the sum of 26 and 10.                 │ auto   │ auto  │
+│ 11   │ User asked for the sum of 37 and 45.                 │ auto   │ auto  │
+│ 12   │ User asked for the sum of 23 and 30.                 │ auto   │ auto  │
+│ 13   │ User asked for the sum of 25 and 10.                 │ auto   │ auto  │
+│ 14   │ User asked for the sum of 15 and 11.                 │ auto   │ auto  │
+│ 15   │ User requested a single number answer only.          │ auto   │ auto  │
+│ 16   │ User asked for the sum of 19 and 25.                 │ auto   │ auto  │
+│ 17   │ User asked for the sum of 0 and 23.                  │ auto   │ auto  │
+│ 18   │ User asked for the sum of 10 and 27.                 │ auto   │ auto  │
+│ 19   │ User asked for the sum of 14 and 13.                 │ auto   │ auto  │
+│ 20   │ User asked for the sum of 3 and 24.                  │ auto   │ auto  │
+│ 21   │ User asked for the sum of 34 and 22.                 │ auto   │ auto  │
+│ 22   │ User asked for the sum of 36 and 10.                 │ auto   │ auto  │
+│ 23   │ User asked for the sum of 0 and 20.                  │ auto   │ auto  │
+│ 24   │ User asked for the sum of 39 and 2.                  │ auto   │ auto  │
+│ 25   │ User asked for the sum of 17 and 25.                 │ auto   │ auto  │
+│ 26   │ User asked for the sum of 23 and 41.                 │ auto   │ auto  │
+│ 27   │ User asked for the sum of 9 and 10.                  │ auto   │ auto  │
+│ 28   │ User asked for the sum of 11 and 8.                  │ auto   │ auto  │
+│ 29   │ User asked for the sum of 38 and 49.                 │ auto   │ auto  │
+│ 30   │ User asked for the sum of 44 and 13.                 │ auto   │ auto  │
+│ 31   │ User asked for the sum of 42 and 30.                 │ auto   │ auto  │
+│ 32   │ User asked for the sum of 22 and 40.                 │ auto   │ auto  │
+│ 33   │ User asked for the sum of 44 and 39.                 │ auto   │ auto  │
+│ 34   │ El usuario identifica su código interno como         │ auto   │ auto  │
+│      │ ZX-9931.                                             │        │       │
+│ 35   │ El usuario interactúa con una IA llamada OpenJarvis. │ auto   │ auto  │
+│ 36   │ User asked for the sum of 4 and 34.                  │ auto   │ auto  │
+│ 37   │ User asked for the sum of 13 and 9.                  │ auto   │ auto  │
+│ 38   │ User asked for the sum of 43 and 5.                  │ auto   │ auto  │
+│ 39   │ User asked for the sum of 21 and 30.                 │ auto   │ auto  │
+│ 40   │ User asked for the sum of 18 and 28.                 │ auto   │ auto  │
+│ 41   │ User asked for the sum of 30 and 25.                 │ auto   │ auto  │
+│ 42   │ User asked for the sum of 13 and 27.                 │ auto   │ auto  │
+│ 43   │ User asked for the sum of 32 and 3.                  │ auto   │ auto  │
+│ 44   │ User asked for the sum of 44 and 18.                 │ auto   │ auto  │
+│ 45   │ User asked for the sum of 34 and 42.                 │ auto   │ auto  │
+│ 46   │ User asked for the sum of 9 and 47.                  │ auto   │ auto  │
+│ 47   │ User asked for the sum of 23 and 19.                 │ auto   │ auto  │
+│ 48   │ User asked for the sum of 4 and 15.                  │ auto   │ auto  │
+│ 49   │ User asked for the sum of 40 and 17.                 │ auto   │ auto  │
+│ 50   │ User asked for the sum of 44 and 38.                 │ auto   │ auto  │
+│ 51   │ User asked for the sum of 18 and 22.                 │ auto   │ auto  │
+│ 52   │ User asked for the sum of 17 and 43.                 │ auto   │ auto  │
+│ 53   │ User asked for the result of 0 + 2.                  │ auto   │ auto  │
+│ 54   │ User asked for the sum of 14 and 29.                 │ auto   │ auto  │
+│ 55   │ User asked for the sum of 1 and 32.                  │ auto   │ auto  │
+│ 56   │ User asked for the sum of 43 and 31.                 │ auto   │ auto  │
+│ 57   │ User asked for the sum of 49 and 22.                 │ auto   │ auto  │
+│ 58   │ User asked for the sum of 9 and 33.                  │ auto   │ auto  │
+│ 59   │ User asked for the sum of 37 and 13.                 │ auto   │ auto  │
+│ 60   │ User asked for the sum of 32 and 24.                 │ auto   │ auto  │
+│ 61   │ User asked for the sum of 25 and 31.                 │ auto   │ auto  │
+│ 62   │ User asked for the sum of 28 and 47.                 │ auto   │ auto  │
+│ 63   │ User asked for the sum of 17 and 42.                 │ auto   │ auto  │
+│ 64   │ Mi proyecto ficticio se llama Halcon-7.              │ auto   │ auto  │
+│ 65   │ Su código interno es ZX-9931.                        │ auto   │ auto  │
+│ 66   │ Estoy listo para discutir temas relacionados con mi  │ auto   │ auto  │
+│      │ entorno local.                                       │        │       │
+│ 67   │ User asked for the sum of 31 and 13.                 │ auto   │ auto  │
+│ 68   │ User asked for the sum of 21 and 0.                  │ auto   │ auto  │
+│ 69   │ User asked for the sum of 18 and 13.                 │ auto   │ auto  │
+│ 70   │ Estoy listo para ayudarte en temas relacionados.     │ auto   │ auto  │
+└──────┴──────────────────────────────────────────────────────┴────────┴───────┘
+R1: ¡Entendido! He registrado que tu proyecto ficticio se llama **Halcon-7** y su código interno es **ZX-9931**.
+
+¿Hay algo más específico sobre este proyecto o algún tema relacionado con tu entorno local que te gustaría discutir? Estoy aquí para ayudarte. / R2: El código interno de tu proyecto ficticio Halcon-7 es **ZX-9931**.

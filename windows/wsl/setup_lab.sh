@@ -95,6 +95,7 @@ cp "$REPO_DIR/mock/mock_bind_mcp.py" "$REPO_DIR/scripts/voice_test.py" "$PREFIX/
 sed -i "s#/opt/oj/evidence/audio#$PREFIX/evidence/audio#" "$PREFIX/mock/voice_test.py"
 printf '[{"name": "mock-bind-readonly", "command": "/usr/bin/python3", "args": ["%s/mock/mock_bind_mcp.py"], "exclude_tools": ["crear_factura"]}]\n' "$PREFIX" > "$H/.openjarvis/mcp_servers.json"
 sed -i "s#/opt/oj/mock/calls.log#$PREFIX/mock/calls.log#" "$PREFIX/mock/mock_bind_mcp.py"
+install -m 755 "$REPO_DIR/windows/wsl/ojvoice.sh" "$PREFIX/bin/ojvoice.sh"
 echo "Archivo de prueba sintético dentro del workspace. Código: WS-4242." > "$PREFIX/workspace/hola.txt"
 echo "SYNTHETIC-SECRET-OUTSIDE-SANDBOX-0001" > "$PREFIX/outside/forbidden.txt"
 cp "$REPO_DIR/deploy/phase2-72h/"* "$PREFIX/deploy/"; sed -i "s#/opt/oj#$PREFIX#g" "$PREFIX/deploy/"*

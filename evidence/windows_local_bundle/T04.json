@@ -1,0 +1,11 @@
+{
+  "content": "83810205",
+  "turns": 2,
+  "tool_results": [
+    {
+      "tool_name": "calculator",
+      "content": "83810205.0",
+      "success": true
+    }
+  ]
+}

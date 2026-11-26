@@ -1,0 +1,24 @@
+{
+ "af_heart": {
+  "voice": "af_heart",
+  "text_in": "Hello Jarvis. The synthetic invoice total is four hundred twenty dollars.",
+  "tts_s": 8.43,
+  "wav": "/opt/ojlab/evidence/audio/tts_af_heart.wav",
+  "audio_s": 5.1,
+  "rate": 24000,
+  "stt_s": 1.5,
+  "text_out": "Hello Jarvis, the synthetic invoice total is $420.",
+  "lang": "en"
+ },
+ "ef_dora": {
+  "voice": "ef_dora",
+  "text_in": "Hola Jarvis. El reporte de cobranza de prueba está listo.",
+  "tts_s": 1.07,
+  "wav": "/opt/ojlab/evidence/audio/tts_ef_dora.wav",
+  "audio_s": 3.48,
+  "rate": 24000,
+  "stt_s": 1.09,
+  "text_out": "Hola Harbys, el reporte de cobranza de prueba está listo.",
+  "lang": "es"
+ }
+}

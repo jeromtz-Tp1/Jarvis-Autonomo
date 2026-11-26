@@ -1,11 +1,11 @@
 # Presupuesto TOTAL de OpenJarvis en el host compartido (protege a OpenClaw).
-# Ajustar tras el inventario: MemoryMax <= 50% de MemAvailable observado en hora pico.
+# Medido con voz activa (Whisper+Kokoro cargados): ~6.1 GB en uso. Cabe en el límite por defecto de WSL (50 % RAM) en PCs de 16 GB.
 [Unit]
 Description=OpenJarvis test slice (72h trial, resource-capped)
 
 [Slice]
-MemoryHigh=6G
-MemoryMax=7G
+MemoryHigh=7G
+MemoryMax=7680M
 MemorySwapMax=0
 CPUQuota=200%
 CPUWeight=50
