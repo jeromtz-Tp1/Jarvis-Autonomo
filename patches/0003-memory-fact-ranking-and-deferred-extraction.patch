@@ -25,10 +25,10 @@ index d52020e7..fd6ff6c7 100644
          # extraction model or the store at all.
          if self._blocks_exchange(self._scan(f"{user_text}\n{assistant_text}")):
 diff --git a/src/openjarvis/tools/storage/context.py b/src/openjarvis/tools/storage/context.py
-index abc4e3f5..63657418 100644
+index abc4e3f5..b1a398e1 100644
 --- a/src/openjarvis/tools/storage/context.py
 +++ b/src/openjarvis/tools/storage/context.py
-@@ -191,7 +191,24 @@ def inject_context(
+@@ -191,7 +191,40 @@ def inject_context(
          fact_budget //= 2
      selected_facts: List[Fact] = []
      total_tokens = 0
@@ -41,15 +41,31 @@ index abc4e3f5..63657418 100644
 +        import re as _re
 +        import unicodedata as _ud
 +
++        _stop = {"para", "como", "esta", "este", "esto", "pero", "porq", "cual", "cuan", "dond", "cuan",
++                  "sobr", "tien", "hace", "usua", "dato", "dime", "quie", "much", "algo", "todo", "that", "this", "what", "with"}
++
 +        def _words(text: str) -> set:
 +            text = _ud.normalize("NFKD", text.lower())
 +            text = "".join(ch for ch in text if not _ud.combining(ch))
-+            return {w for w in _re.findall(r"[a-z0-9]+", text) if len(w) >= 4 or w.isdigit()}
++            # 4-letter stems: "llamo"/"llama", "codigo"/"codigos" match; digits kept whole
++            out = set()
++            for w in _re.findall(r"[a-z0-9]+", text):
++                if w.isdigit():
++                    out.add(w)
++                elif len(w) >= 4 and w[:4] not in _stop:
++                    out.add(w[:4])
++            return out
 +
 +        qwords = _words(query)
 +        ordered_facts = sorted(
 +            ordered_facts, key=lambda f: -len(qwords & _words(f.text))
 +        )  # stable sort keeps newest-first among equal scores
++        try:
++            _cap = int(_os.environ.get("OJ_MEMORY_FACT_MAX", "0"))
++        except ValueError:
++            _cap = 0
++        if _cap > 0:
++            ordered_facts = ordered_facts[:_cap]
 +    for fact in ordered_facts:
          tokens = _count_tokens(fact.text)
          if total_tokens + tokens > fact_budget:

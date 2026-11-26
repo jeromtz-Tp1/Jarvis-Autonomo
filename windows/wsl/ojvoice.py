@@ -22,7 +22,7 @@ VOICE = os.environ.get("OJ_VOICE", "ef_dora")
 MAX_TOKENS = int(os.environ.get("OJ_VOICE_MAX_TOKENS", "160"))
 HIST = os.path.join(HOME, "voice_history.jsonl")
 SYSTEM = ("Eres JARVIS, asistente personal de Jerónimo. Responde en español, en una o dos frases cortas, "
-          "en texto plano apto para leerse en voz alta, sin markdown, listas ni emojis.")
+          "en texto plano apto para leerse en voz alta, sin markdown, listas ni emojis. No hagas preguntas de seguimiento.")
 T0 = time.monotonic()
 ms = lambda: int((time.monotonic() - T0) * 1000)
 timing = {}

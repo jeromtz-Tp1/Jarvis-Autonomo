@@ -12,7 +12,7 @@
 #   5. CPU: cuota = todas las CPU de la VM (evita la penalización por estrangulamiento de hilos de llama.cpp).
 #   6. Precarga al arrancar (ojl-warmup.service): modelo, Whisper y Kokoro en memoria antes de la primera pregunta.
 #   7. ojvoice.py: TTS por frase en paralelo y reproducción por fragmentos.
-#   8. Memoria rápida (parche 0003): hechos ordenados por relevancia con presupuesto de 512 tokens (antes 2048, solo
+#   8. Memoria rápida (parche 0003): 8 hechos más relevantes, presupuesto 256 tokens (antes 2048, solo
 #      por antigüedad) y extracción de memoria diferida mientras dura un turno de voz.
 set -uo pipefail
 PREFIX=/opt/oj; OJUSER=jarvis; CMD=status
@@ -66,15 +66,15 @@ apply() {
     elif asu "cd $PREFIX/src && git apply -R --check $PREFIX/$n.patch" 2>/dev/null; then oj_ok "parche $n ya presente"
     else oj_fail "parche $n no aplicable"; fi
   done
-  toml_set memory context_max_tokens 512
+  toml_set memory context_max_tokens 256
 
   # 2/4. Variables de entorno (servicio y shell) en bloque marcado
   for f in "$ENVF" "$PREFIX/bin/ojenv.sh"; do
     [ -f "$f" ] || continue; strip_block "$f"
     pre=""; [ "$f" = "$PREFIX/bin/ojenv.sh" ] && pre="export "
-    { echo "$BEGIN"; for kv in "JARVIS_NUM_CTX=$CTX" "OLLAMA_CONTEXT_LENGTH=$CTX" "OLLAMA_KEEP_ALIVE=-1" "OJ_STT_BEAM_SIZE=1" "OJ_STT_VAD=1" "OJ_STT_NO_PREV_TEXT=1" "OJ_MEMORY_FACT_RANK=1" "OJ_MEMORY_DEFER_FILE=$H/.openjarvis/.voice_busy" "OJ_MEMORY_DEFER_MAX_S=30" "OJ_RESPECT_CLIENT_MAX_TOKENS=1"; do echo "$pre$kv"; done; echo "$END"; } >> "$f"
+    { echo "$BEGIN"; for kv in "JARVIS_NUM_CTX=$CTX" "OLLAMA_CONTEXT_LENGTH=$CTX" "OLLAMA_KEEP_ALIVE=-1" "OJ_STT_BEAM_SIZE=1" "OJ_STT_VAD=1" "OJ_STT_NO_PREV_TEXT=1" "OJ_MEMORY_FACT_RANK=1" "OJ_MEMORY_FACT_MAX=8" "OJ_MEMORY_DEFER_FILE=$H/.openjarvis/.voice_busy" "OJ_MEMORY_DEFER_MAX_S=30" "OJ_RESPECT_CLIENT_MAX_TOKENS=1"; do echo "$pre$kv"; done; echo "$END"; } >> "$f"
   done
-  oj_ok "entorno: contexto $CTX, modelo residente, STT beam=1 + VAD, memoria por relevancia (512 tokens) y extracción diferida"
+  oj_ok "entorno: contexto $CTX, modelo residente, STT beam=1 + VAD, memoria por relevancia (8 hechos, 256 tokens) y extracción diferida"
 
   # 1. Camino directo para la voz y sin herramienta de razonamiento extra
   toml_set server agent '"simple"'

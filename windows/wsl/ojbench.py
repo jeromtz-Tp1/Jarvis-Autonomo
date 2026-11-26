@@ -20,7 +20,7 @@ p.add_argument("--server-model", default="", help="modelo configurado en el serv
 p.add_argument("--gap-s", type=float, default=8.0, help="pausa entre turnos (tiempo realista de escucha y habla del usuario; deja terminar la extracción de memoria)")
 a = p.parse_args()
 SYSTEM = ("Eres JARVIS, asistente personal de Jerónimo. Responde en español, en una o dos frases cortas, "
-          "en texto plano apto para leerse en voz alta, sin markdown, listas ni emojis.")
+          "en texto plano apto para leerse en voz alta, sin markdown, listas ni emojis. No hagas preguntas de seguimiento.")
 QUALITY = [  # (pregunta, palabras requeridas (alguna de cada grupo))
     ("¿Cuál es la capital de Francia?", [["parís", "paris"]]),
     ("¿Cuánto es 15 por 4?", [["60", "sesenta"]]),
