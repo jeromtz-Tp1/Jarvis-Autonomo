@@ -32,7 +32,7 @@ MODEL=$(oj_config_model); MODEL=${MODEL:-qwen3.5:4b}
 if oj_model_present "$MODEL"; then oj_ok "modelo $MODEL presente ($(du -sh "$H/.ollama/models" | cut -f1) en disco)"
 elif [ $ALLOW_DL = 1 ]; then oj_pull_model_maintenance "$MODEL" || exit 3
 else
-  alt=$(ls "$H/.ollama/models/manifests/registry.ollama.ai/library/"*/* 2>/dev/null | head -1 | awk -F/ '{print $(NF-1)":"$NF}')
+  alt=$(oj_models_installed | grep -v '^jarvis-voz' | head -1)
   if [ -n "$alt" ]; then oj_warn "el modelo configurado $MODEL no está; se usa el instalado: $alt"; MODEL=$alt
     sed -i "s#^default_model = .*#default_model = \"$MODEL\"#" "$H/.openjarvis/config.toml"
   else oj_fail "no hay ningún modelo descargado. Repita con -AllowModelDownload"; exit 3; fi
@@ -41,6 +41,9 @@ oj_hf_cached "Systran--faster-whisper-base" && oj_ok "modelo STT Whisper base en
 oj_hf_cached "hexgrad--Kokoro-82M" && oj_ok "modelo TTS Kokoro en caché" || oj_fail "falta el modelo Kokoro en caché (-AllowModelDownload)"
 
 oj_log "4/7 Scripts y configuración corregidos"
+# Conservar la optimización de la Fase 2C (bloque OJ-OPT) si está aplicada
+OPTBLK_ENV=$(sed -n '/^# >>> OJ-OPT/,/^# <<< OJ-OPT/p' "$PREFIX/bin/ojenv.sh" 2>/dev/null)
+OPTBLK_UNIT=$(sed -n '/^# >>> OJ-OPT/,/^# <<< OJ-OPT/p' "$PREFIX/deploy/ojl.env" 2>/dev/null)
 cat > "$PREFIX/bin/ojenv.sh" <<EOF
 # Entorno aislado de OpenJarvis (sin secretos) — regenerado por repair_lab.sh $(date -u +%F)
 export HOME=$H OPENJARVIS_HOME=$H/.openjarvis UV_NO_CONFIG=1
@@ -51,8 +54,9 @@ export HF_HUB_DISABLE_XET=1 HF_HUB_DISABLE_TELEMETRY=1 DO_NOT_TRACK=1
 export NIM_HOST=http://127.0.0.1:9 OPENJARVIS_STRICT_TOOLS=1
 EOF
 [ -f "$PREFIX/ca-bundle.crt" ] && echo "export SSL_CERT_FILE=$PREFIX/ca-bundle.crt REQUESTS_CA_BUNDLE=$PREFIX/ca-bundle.crt CURL_CA_BUNDLE=$PREFIX/ca-bundle.crt GIT_SSL_CAINFO=$PREFIX/ca-bundle.crt" >> "$PREFIX/bin/ojenv.sh"
+[ -n "$OPTBLK_ENV" ] && printf '%s\n' "$OPTBLK_ENV" >> "$PREFIX/bin/ojenv.sh" && oj_ok "optimización 2C conservada en ojenv.sh"
 sed -e "s#@PREFIX@#$PREFIX#g" -e "s#@OJUSER@#$OJUSER#g" "$B/windows/wsl/ojctl.sh" > "$PREFIX/bin/ojctl.sh"; chmod 755 "$PREFIX/bin/ojctl.sh"
-install -m 755 "$B/windows/wsl/ojvoice.sh" "$PREFIX/bin/ojvoice.sh"
+install -m 755 "$B/windows/wsl/ojvoice.sh" "$PREFIX/bin/ojvoice.sh"; install -m 755 "$B/windows/wsl/ojvoice.py" "$PREFIX/bin/ojvoice.py"
 install -d "$PREFIX/fixtures"; install -m 644 "$B/windows/wsl/fixtures/stt_es.wav" "$PREFIX/fixtures/stt_es.wav"
 grep -q '^mode = "block"' "$H/.openjarvis/config.toml" || { sed -i 's/^mode = .*/mode = "block"/' "$H/.openjarvis/config.toml"; oj_warn "security.mode restaurado a block"; }
 grep -q '^host = "127.0.0.1"' "$H/.openjarvis/config.toml" || oj_fail "server.host no es 127.0.0.1 en config.toml (revisar)"
@@ -62,6 +66,7 @@ oj_log "5/7 Servicios systemd y recursos persistentes"
 if systemd_active; then
   install -d "$PREFIX/deploy"; cp "$B/deploy/phase2-72h/"* "$PREFIX/deploy/"; sed -i "s#/opt/oj#$PREFIX#g" "$PREFIX/deploy/"*
   sed -i "s#^User=jarvis#User=$OJUSER#; s#^Group=jarvis#Group=$OJUSER#" "$PREFIX/deploy/"*.service
+  [ -n "$OPTBLK_UNIT" ] && printf '%s\n' "$OPTBLK_UNIT" >> "$PREFIX/deploy/ojl.env"
   cp "$PREFIX/deploy/"*.slice "$PREFIX/deploy/"*.service "$PREFIX/deploy/"*.timer /etc/systemd/system/
   oj_ok "unidades reinstaladas; recursos: $(oj_write_slice_dropin)"
   systemd-analyze verify /etc/systemd/system/ojl-*.service /etc/systemd/system/openjarvis.slice 2>&1 | grep -iE "unknown|invalid" && oj_fail "unidades systemd con errores" || oj_ok "unidades systemd válidas"

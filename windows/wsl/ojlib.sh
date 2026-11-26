@@ -56,8 +56,14 @@ EOF
 }
 
 # ---------- Modelos: comprobación local (sin red) y descarga de mantenimiento ----------
-oj_model_manifest() { local m=$1 name=${1%%:*} tag=${1#*:}; [ "$tag" = "$m" ] && tag=latest; echo "$H/.ollama/models/manifests/registry.ollama.ai/library/$name/$tag"; }
+# Ollama guarda los modelos descargados en manifests/registry.ollama.ai/… y (desde 0.40) los creados localmente en
+# manifests-v2/ollama.com/…: se aceptan ambos formatos.
+oj_model_manifest() { local m=$1 name=${1%%:*} tag=${1#*:} c; [ "$tag" = "$m" ] && tag=latest
+  for c in "$H/.ollama/models/manifests/registry.ollama.ai/library/$name/$tag" "$H/.ollama/models/manifests-v2/ollama.com/library/$name/$tag" "$H"/.ollama/models/manifests-v2/*/library/"$name/$tag"; do
+    [ -s "$c" ] && { echo "$c"; return 0; }; done
+  echo "$H/.ollama/models/manifests/registry.ollama.ai/library/$name/$tag"; }
 oj_model_present() { [ -s "$(oj_model_manifest "$1")" ]; }
+oj_models_installed() { ls -d "$H"/.ollama/models/manifests/*/library/*/* "$H"/.ollama/models/manifests-v2/*/library/*/* 2>/dev/null | awk -F/ '{print $(NF-1)":"$NF}' | sort -u; }
 oj_hf_cached() { ls -d "$H/.cache/huggingface/hub/models--$1" >/dev/null 2>&1; }
 
 # Descarga un modelo con un Ollama TEMPORAL (sin restricciones systemd, puerto 11435, solo loopback)
@@ -95,6 +101,49 @@ oj_services_restart() {
   return 1
 }
 
+# oj_chat_stream MODELO PREGUNTA SALIDA -> texto de la respuesta por el MISMO camino que la voz (streaming directo)
+oj_chat_stream() {
+  python3 - "$OJ_API" "$1" "$2" > "$3" 2>&1 <<'PYEOF'
+import json, sys, urllib.request
+api, model, q = sys.argv[1:4]
+body = {"model": model, "stream": True, "max_tokens": 120, "temperature": 0.2,
+        "messages": [{"role": "system", "content": "Eres JARVIS. Responde en español, en una frase."}, {"role": "user", "content": q}]}
+r = urllib.request.Request(api + "/v1/chat/completions", data=json.dumps(body).encode(), method="POST", headers={"Content-Type": "application/json"})
+out = ""
+with urllib.request.urlopen(r, timeout=300) as resp:
+    for ln in resp:
+        ln = ln.decode("utf-8", "replace").strip()
+        if ln.startswith("data:") and ln[5:].strip() != "[DONE]":
+            try: out += json.loads(ln[5:])["choices"][0].get("delta", {}).get("content") or ""
+            except Exception: pass
+print(out)
+PYEOF
+}
+
+# oj_memtest DIR MODELO — prueba de memoria persistente sin falsos positivos:
+#  a) escribe un hecho de verificación con el almacén oficial; b) el archivo debe existir y contenerlo;
+#  c) reinicia el servidor; d) JARVIS debe recordarlo; e) la extracción automática debe guardar un hecho nuevo.
+oj_memtest() {
+  local ev=$1 model=$2 f="$H/.openjarvis/memory_facts.jsonl" before after tok
+  tok=$(( 1000 + RANDOM % 8999 ))$(( RANDOM % 10 ))   # único por ejecución: evita falsos positivos al repetir
+  local fact="Dato de verificación de JARVIS: el código de prueba de memoria es MEM-7731."
+  grep -q '^enabled = true' <(sed -n '/^\[memory\]/,/^\[/p' "$H/.openjarvis/config.toml") || { oj_fail "Memoria: [memory] enabled no es true en config.toml"; return; }
+  before=$(cat "$f" 2>/dev/null | grep -c . || true); before=${before:-0}
+  asu "python -c \"from openjarvis.memory.store import LocalFactStore as S; s=S(); s.add('$fact', source='selftest', trust='trusted'); print(len(s.list()))\"" > "$ev/mem_write.txt" 2>&1
+  if [ -s "$f" ] && grep -q "MEM-7731" "$f"; then oj_ok "Memoria: archivo $f existe y contiene el hecho de verificación ($(grep -c . "$f") hechos)"
+  else oj_fail "Memoria: no se pudo escribir/leer $f ($(head -c 200 "$ev/mem_write.txt"))"; return; fi
+  if systemd_active && [ -f /etc/systemd/system/ojl-server.service ]; then systemctl restart ojl-server.service; else "$PREFIX/bin/ojctl.sh" restart >/dev/null 2>&1; fi
+  oj_wait_health 240 || { oj_fail "Memoria: el servidor no volvió tras reiniciar"; return; }
+  oj_chat_stream "$model" "¿Cuál es el código de prueba de memoria?" "$ev/mem_recall.txt"
+  grep -q "7731" "$ev/mem_recall.txt" && oj_ok "Memoria: recordado tras reiniciar el servidor (MEM-7731)" \
+    || oj_fail "Memoria: tras reiniciar NO recordó el hecho. Respuesta: $(head -c 160 "$ev/mem_recall.txt")"
+  oj_chat_stream "$model" "Recuerda este dato personal: mi número de casillero de prueba es $tok." "$ev/mem_extract_chat.txt"
+  for _ in $(seq 60); do grep -q "$tok" "$f" 2>/dev/null && break; sleep 3; done
+  after=$(cat "$f" 2>/dev/null | grep -c . || true); after=${after:-0}
+  grep -q "$tok" "$f" 2>/dev/null && oj_ok "Memoria: la extracción automática guardó un hecho nuevo ($before -> $after hechos)" \
+    || oj_fail "Memoria: la extracción automática no guardó hechos en 180 s ($before -> $after). Revise el servicio de memoria en el log del servidor"
+}
+
 # ---------- Autodiagnóstico independiente: STT, inferencia, TTS, voz extremo a extremo, memoria, seguridad ----------
 oj_selftest() {
   local ev=${1:-$PREFIX/evidence/selftest_$(date -u +%Y%m%dT%H%M%SZ)} model code t0 fx
@@ -127,10 +176,8 @@ oj_selftest() {
     oj_ok "Voz extremo a extremo: $(grep '^JARVIS:' "$ev/voice_dialog.txt" | head -c 120)"
   else oj_fail "Voz extremo a extremo: $(tail -3 "$ev/voice_dialog.txt" 2>/dev/null | tr '\n' ' ')"; fi
 
-  # 5. Memoria persistente
-  if [ -r "$H/.openjarvis/memory_facts.jsonl" ] || [ -r "$H/.openjarvis/memory.db" ]; then
-    oj_ok "Memoria persistente en disco: $(wc -l < "$H/.openjarvis/memory_facts.jsonl" 2>/dev/null || echo 0) hechos guardados"
-  else oj_warn "Memoria: aún no hay hechos guardados (se crean al conversar)"; fi
+  # 5. Memoria persistente REAL (sustituye la comprobación que daba falso positivo)
+  oj_memtest "$ev" "$model"
 
   # 6. Seguridad conservada
   local exposed; exposed=$(for f in /proc/net/tcp /proc/net/tcp6; do tail -n +2 "$f" 2>/dev/null; done | awk '$4=="0A"{print $2}' | grep -E ':(1F40|2CAA)$' | grep -vE '^(0100007F|00000000000000000000000001000000):' || true)

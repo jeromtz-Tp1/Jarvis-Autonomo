@@ -1,0 +1,19 @@
+diff --git a/src/openjarvis/speech/faster_whisper.py b/src/openjarvis/speech/faster_whisper.py
+index 8955fc5a..daebf04d 100644
+--- a/src/openjarvis/speech/faster_whisper.py
++++ b/src/openjarvis/speech/faster_whisper.py
+@@ -119,6 +119,14 @@ class FasterWhisperBackend(SpeechBackend):
+                 kwargs = {}
+                 if language:
+                     kwargs["language"] = language
++                # JARVIS performance (patch 0002): tunable decoding for short voice turns.
++                # Unset variables keep faster-whisper's defaults (beam_size=5, no VAD).
++                if os.environ.get("OJ_STT_BEAM_SIZE"):
++                    kwargs["beam_size"] = max(1, int(os.environ["OJ_STT_BEAM_SIZE"]))
++                if os.environ.get("OJ_STT_VAD") == "1":
++                    kwargs["vad_filter"] = True
++                if os.environ.get("OJ_STT_NO_PREV_TEXT") == "1":
++                    kwargs["condition_on_previous_text"] = False
+ 
+                 segments_iter, info = model.transcribe(tmp.name, **kwargs)
+                 segments_list = list(segments_iter)
