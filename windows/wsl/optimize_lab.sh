@@ -12,6 +12,8 @@
 #   5. CPU: cuota = todas las CPU de la VM (evita la penalización por estrangulamiento de hilos de llama.cpp).
 #   6. Precarga al arrancar (ojl-warmup.service): modelo, Whisper y Kokoro en memoria antes de la primera pregunta.
 #   7. ojvoice.py: TTS por frase en paralelo y reproducción por fragmentos.
+#   8. Memoria rápida (parche 0003): hechos ordenados por relevancia con presupuesto de 512 tokens (antes 2048, solo
+#      por antigüedad) y extracción de memoria diferida mientras dura un turno de voz.
 set -uo pipefail
 PREFIX=/opt/oj; OJUSER=jarvis; CMD=status
 MODEL=""; THREADS=""; CTX=4096
@@ -61,13 +63,20 @@ apply() {
   elif asu "cd $PREFIX/src && git apply -R --check $PREFIX/0002.patch" 2>/dev/null; then oj_ok "parche STT 0002 ya presente"
   else oj_fail "parche STT 0002 no aplicable"; fi
 
+  # Memoria rápida (parche 0003): hechos por relevancia con presupuesto 512 tokens y extracción diferida durante la voz
+  install -m 644 "$B/patches/0003-memory-fact-ranking-and-deferred-extraction.patch" "$PREFIX/0003.patch"; chown "$OJUSER" "$PREFIX/0003.patch"
+  if asu "cd $PREFIX/src && git apply --check $PREFIX/0003.patch" 2>/dev/null; then asu "cd $PREFIX/src && git apply $PREFIX/0003.patch" && touch "$ST/patch0003"; oj_ok "parche de memoria 0003 aplicado"
+  elif asu "cd $PREFIX/src && git apply -R --check $PREFIX/0003.patch" 2>/dev/null; then oj_ok "parche de memoria 0003 ya presente"
+  else oj_fail "parche de memoria 0003 no aplicable"; fi
+  toml_set memory context_max_tokens 512
+
   # 2/4. Variables de entorno (servicio y shell) en bloque marcado
   for f in "$ENVF" "$PREFIX/bin/ojenv.sh"; do
     [ -f "$f" ] || continue; strip_block "$f"
     pre=""; [ "$f" = "$PREFIX/bin/ojenv.sh" ] && pre="export "
-    { echo "$BEGIN"; for kv in "JARVIS_NUM_CTX=$CTX" "OLLAMA_CONTEXT_LENGTH=$CTX" "OLLAMA_KEEP_ALIVE=-1" "OJ_STT_BEAM_SIZE=1" "OJ_STT_VAD=1" "OJ_STT_NO_PREV_TEXT=1"; do echo "$pre$kv"; done; echo "$END"; } >> "$f"
+    { echo "$BEGIN"; for kv in "JARVIS_NUM_CTX=$CTX" "OLLAMA_CONTEXT_LENGTH=$CTX" "OLLAMA_KEEP_ALIVE=-1" "OJ_STT_BEAM_SIZE=1" "OJ_STT_VAD=1" "OJ_STT_NO_PREV_TEXT=1" "OJ_MEMORY_FACT_RANK=1" "OJ_MEMORY_DEFER_FILE=$H/.openjarvis/.voice_busy" "OJ_MEMORY_DEFER_MAX_S=30"; do echo "$pre$kv"; done; echo "$END"; } >> "$f"
   done
-  oj_ok "entorno: contexto $CTX, modelo residente, STT beam=1 + VAD"
+  oj_ok "entorno: contexto $CTX, modelo residente, STT beam=1 + VAD, memoria por relevancia (512 tokens) y extracción diferida"
 
   # 1. Camino directo para la voz y sin herramienta de razonamiento extra
   toml_set server agent '"simple"'
@@ -134,6 +143,7 @@ revert() {
   oj_log "Revirtiendo optimización"
   restore "$CFG" "$ENVF" "$PREFIX/bin/ojenv.sh" "$PREFIX/bin/ojvoice.sh" "$PREFIX/bin/ojctl.sh"
   strip_block "$ENVF"; strip_block "$PREFIX/bin/ojenv.sh"
+  if [ -f "$ST/patch0003" ]; then asu "cd $PREFIX/src && git apply -R $PREFIX/0003.patch" && oj_ok "parche 0003 retirado"; fi
   if [ -f "$ST/patch0002" ]; then asu "cd $PREFIX/src && git apply -R $PREFIX/0002.patch" && oj_ok "parche 0002 retirado"; fi
   rm -f "$PREFIX/bin/ojvoice.py" "$PREFIX/bin/ojwarmup.sh"
   if systemd_active; then systemctl disable --now ojl-warmup.service >/dev/null 2>&1; rm -f /etc/systemd/system/ojl-warmup.service /etc/systemd/system/openjarvis.slice.d/20-performance.conf; systemctl daemon-reload; fi

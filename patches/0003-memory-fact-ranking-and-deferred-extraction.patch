@@ -1,0 +1,56 @@
+diff --git a/src/openjarvis/memory/service.py b/src/openjarvis/memory/service.py
+index d52020e7..fd6ff6c7 100644
+--- a/src/openjarvis/memory/service.py
++++ b/src/openjarvis/memory/service.py
+@@ -211,6 +211,21 @@ class MemoryService:
+ 
+     def _process(self, job: Any) -> None:
+         user_text, assistant_text = job
++        # JARVIS performance (patch 0003): defer extraction while a voice turn is in progress
++        # (marker file written by ojvoice) so it does not compete with speech synthesis.
++        import os as _os
++        import time as _time
++
++        marker = _os.environ.get("OJ_MEMORY_DEFER_FILE")
++        if marker:
++            deadline = _time.monotonic() + float(_os.environ.get("OJ_MEMORY_DEFER_MAX_S", "30"))
++            while _time.monotonic() < deadline and _os.path.exists(marker):
++                try:
++                    if _time.time() - _os.path.getmtime(marker) > 120:
++                        break  # stale marker
++                except OSError:
++                    break
++                _time.sleep(0.25)
+         # Scan BEFORE extraction so an overt injection attempt never reaches the
+         # extraction model or the store at all.
+         if self._blocks_exchange(self._scan(f"{user_text}\n{assistant_text}")):
+diff --git a/src/openjarvis/tools/storage/context.py b/src/openjarvis/tools/storage/context.py
+index abc4e3f5..63657418 100644
+--- a/src/openjarvis/tools/storage/context.py
++++ b/src/openjarvis/tools/storage/context.py
+@@ -191,7 +191,24 @@ def inject_context(
+         fact_budget //= 2
+     selected_facts: List[Fact] = []
+     total_tokens = 0
+-    for fact in reversed(_trusted_facts(facts)):
++    ordered_facts = list(reversed(_trusted_facts(facts)))  # newest first (upstream default)
++    # JARVIS performance (patch 0003): with OJ_MEMORY_FACT_RANK=1, facts that share words with the
++    # query go first (newest first among ties), so a small context budget keeps the relevant ones.
++    import os as _os
++    if _os.environ.get("OJ_MEMORY_FACT_RANK") == "1" and query:
++        import re as _re
++        import unicodedata as _ud
++
++        def _words(text: str) -> set:
++            text = _ud.normalize("NFKD", text.lower())
++            text = "".join(ch for ch in text if not _ud.combining(ch))
++            return {w for w in _re.findall(r"[a-z0-9]+", text) if len(w) >= 4 or w.isdigit()}
++
++        qwords = _words(query)
++        ordered_facts = sorted(
++            ordered_facts, key=lambda f: -len(qwords & _words(f.text))
++        )  # stable sort keeps newest-first among equal scores
++    for fact in ordered_facts:
+         tokens = _count_tokens(fact.text)
+         if total_tokens + tokens > fact_budget:
+             continue

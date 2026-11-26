@@ -235,4 +235,18 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    # Marcador de "turno de voz en curso": el servicio de memoria (parche 0003) difiere la extracción mientras
+    # existe, para que no compita por la CPU con la síntesis de voz. Se borra siempre al terminar.
+    BUSY = os.environ.get("OJ_MEMORY_DEFER_FILE") or os.path.join(HOME, ".voice_busy")
+    try:
+        open(BUSY, "w").close()
+    except OSError:
+        BUSY = None
+    try:
+        main()
+    finally:
+        if BUSY:
+            try:
+                os.remove(BUSY)
+            except OSError:
+                pass

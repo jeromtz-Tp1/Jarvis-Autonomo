@@ -8,7 +8,7 @@
 OJ_API=${OJ_API:-http://127.0.0.1:8000}
 OJ_OLLAMA=${OJ_OLLAMA:-http://127.0.0.1:11434}
 OJ_MAINT_PORT=11435                       # Ollama temporal SOLO para descargas de mantenimiento
-H="${H:-$PREFIX/home}"
+H="$PREFIX/home"   # siempre derivado de PREFIX (no heredar un H ajeno del entorno)
 
 oj_log()  { echo "[$(date -u +%T)] $*"; }
 oj_ok()   { echo "  [OK]   $*"; }
